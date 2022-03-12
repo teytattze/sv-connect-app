@@ -365,6 +365,27 @@
         }
       }
     },
+    "/api/match/students": {
+      "post": {
+        "operationId": "matchSelectedStudents",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchSelectedStudentsBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/profiles/create": {
       "post": {
         "operationId": "registerProfile",
@@ -772,6 +793,20 @@
         "required": [
           "inviter",
           "invitee"
+        ]
+      },
+      "MatchSelectedStudentsBody": {
+        "type": "object",
+        "properties": {
+          "studentIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "studentIds"
         ]
       },
       "ConnectAccountBody": {

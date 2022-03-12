@@ -24,7 +24,7 @@
     port: 3306,
     username: 'root',
     password: 'password',
-    database: 'sv_connect_app',
+    database: 'sv_connect_db',
     property: 'charset=utf8mb4&parseTime=True&loc=Local',
     url: 'mysql://root:password@localhost:3306/sv_connect_app?charset=utf8mb4&parseTime=True&loc=Local',
   },

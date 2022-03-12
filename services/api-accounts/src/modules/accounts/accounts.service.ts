@@ -5,7 +5,7 @@ import {
   ICreateAccountPayload,
   IUpdateAccountPayload,
 } from '@sv-connect/domain';
-import { ServiceError } from '@sv-connect/domain/errors';
+import { ServiceError } from '@sv-connect/domain';
 import * as bcrypt from 'bcryptjs';
 import { AccountsRepository } from './accounts.repository';
 import { SessionsService } from '../sessions/sessions.service';

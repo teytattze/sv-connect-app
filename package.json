@@ -16,6 +16,9 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\" && prisma format",
     "prepare": "husky install"
   },
+  "dependencies": {
+    "@prisma/client": "^3.6.0"
+  },
   "devDependencies": {
     "husky": "^7.0.0",
     "prettier": "^2.5.1",

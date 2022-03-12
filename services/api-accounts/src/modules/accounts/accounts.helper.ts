@@ -1,5 +1,5 @@
 import { RpcException } from '@nestjs/microservices';
-import { PrismaErrorCode, ServiceError } from '@sv-connect/domain/errors';
+import { PrismaErrorCode, ServiceError } from '@sv-connect/domain';
 import { Prisma } from '@prisma/client';
 
 export const handleRepositoryError = (err: any) => {

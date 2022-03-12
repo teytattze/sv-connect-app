@@ -1,9 +1,23 @@
 version: '3.8'
 
 services:
+  DB:
+    image: mysql:8.0.28
+    environment:
+      MYSQL_DATABASE: 'sv_connect_db'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    volumes:
+      - sv-connect-db:/var/lib/mysql
   RabbitMQ:
     container_name: rabbitmq
     image: rabbitmq:3-management
     ports:
       - '5672:5672'
       - '15672:15672'
+
+volumes:
+  sv-connect-db:
