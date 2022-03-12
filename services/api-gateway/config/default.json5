@@ -1,0 +1,137 @@
+{
+  server: {
+    host: '127.0.0.1',
+    port: 8000,
+    secure: false,
+  },
+  service: {
+    name: 'gateway',
+    alias: 'api-gateway',
+    basePath: '/api',
+  },
+  swagger: {
+    docsPath: './swagger.json',
+  },
+  jwt: {
+    ttl: 900,
+    alg: 'RS512',
+    publicKeyPath: '/config/public-key.pem',
+    privateKeyPath: '/config/private-key.pem',
+  },
+  session: {
+    ttl: 1209600,
+    bytes: 32,
+  },
+  microservices: {
+    accounts: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_accounts_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    auth: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_auth_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    fields: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_fields_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    invitations: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_invitations_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    match: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_match_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    profiles: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_profiles_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    projects: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_projects_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    sessions: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_sessions_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    specializations: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_specializations_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    supervisors: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_supervisors_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    students: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_students_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+  },
+}

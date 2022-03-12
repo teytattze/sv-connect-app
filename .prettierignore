@@ -1,0 +1,10 @@
+.idea
+.vscode
+
+.turbo
+
+.next
+dist
+build
+
+node_modules

@@ -1,0 +1,7 @@
+{
+  "name": "ui",
+  "remotes": {},
+  "exposes": {
+    ".": "./src/exposes"
+  }
+}

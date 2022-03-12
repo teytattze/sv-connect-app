@@ -1,0 +1,26 @@
+{
+  "name": "sv-connect",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "webs/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "turbo run start --parallel",
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\" && prisma format",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "prettier": "^2.5.1",
+    "prisma": "^3.6.0",
+    "turbo": "latest"
+  },
+  "packageManager": "yarn@1.22.15"
+}

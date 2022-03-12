@@ -1,0 +1,11 @@
+{
+  "name": "@sv-connect/eslint",
+  "version": "1.0.0",
+  "author": "tattzetey",
+  "license": "MIT",
+  "files": [
+    "service.js",
+    "web.js"
+  ],
+  "devDependencies": {}
+}

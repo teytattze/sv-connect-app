@@ -1,0 +1,31 @@
+{
+  "name": "@sv-connect/domain",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "author": "tattzetey",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "peerDependencies": {
+    "@prisma/client": "*",
+    "@nestjs/swagger": "*",
+    "class-validator": "*",
+    "class-transformer": "*"
+  },
+  "devDependencies": {
+    "@sv-connect/tsconfig": "*"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./errors": "./dist/errors/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "errors": [
+        "./dist/types/errors/index.d.ts"
+      ]
+    }
+  }
+}

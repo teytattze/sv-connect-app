@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/fields/register": {
+      "post": {
+        "operationId": "registerField",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterFieldInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "fields"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "API Fields",
+    "description": "",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "Fields",
+      "description": ""
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8005"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "RegisterFieldInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "host",
+  "remotes": {
+    "@sv-connect/web-ui": "ui@http://localhost:3100/remoteEntry.js"
+  },
+  "exposes": {}
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@sv-connect/common",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "author": "tattzetey",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "dependencies": {
+    "luxon": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "*",
+    "@nestjs/microservices": "*",
+    "@prisma/client": "*",
+    "@sv-connect/domain": "*",
+    "@types/config": "*",
+    "rxjs": "*"
+  },
+  "devDependencies": {
+    "@sv-connect/tsconfig": "*",
+    "@types/luxon": "^2.0.9"
+  }
+}

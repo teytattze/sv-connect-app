@@ -1,0 +1,14 @@
+{
+  "name": "@sv-connect/tsconfig",
+  "version": "1.0.0",
+  "author": "tattzetey",
+  "license": "MIT",
+  "files": [
+    "lib.json",
+    "service.json",
+    "web.json"
+  ],
+  "devDependencies": {
+    "typescript": "^4.5.4"
+  }
+}

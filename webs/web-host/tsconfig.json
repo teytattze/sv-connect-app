@@ -1,0 +1,11 @@
+{
+  "extends": "@sv-connect/tsconfig/web.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@sv-connect/web-ui": ["../web-ui/src/exposes"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", ".turbo"]
+}

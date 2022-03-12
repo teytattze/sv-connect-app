@@ -1,0 +1,1 @@
+export const PROFILES_CLIENT = 'PROFILES_CLIENT';

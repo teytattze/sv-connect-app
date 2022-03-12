@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:password@localhost:3306/sv_connect_app?charset=utf8mb4&parseTime=True&loc=Local"
+}
+
+model Account {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  emailVerified Boolean     @default(false) @map("email_verified")
+  password      String
+  role          AccountRole @default(STUDENT)
+
+  session    Session?
+  supervisor Supervisor?
+  student    Student?
+  profile    Profile?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("accounts")
+}
+
+enum AccountRole {
+  STUDENT
+  SUPERVISOR
+  ADMIN
+}
+
+model Supervisor {
+  id       String @id @default(uuid())
+  capacity Int    @default(10)
+
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String  @unique @map("account_id")
+
+  field   Field?  @relation(fields: [fieldId], references: [id], onDelete: SetNull)
+  fieldId String? @map("field_id")
+
+  invitations     Invitation[]
+  students        Student[]
+  specializations Specialization[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("supervisors")
+}
+
+model Student {
+  id String @id @default(uuid())
+
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String  @unique @map("account_id")
+
+  supervisor   Supervisor? @relation(fields: [supervisorId], references: [id], onDelete: SetNull)
+  supervisorId String?     @map("supervisor_id")
+
+  invitations Invitation[]
+  project     Project?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("students")
+}
+
+model Invitation {
+  id      String           @id @default(uuid())
+  message String?
+  status  InvitationStatus @default(PENDING)
+
+  inviter   Student? @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+  inviterId String?  @map("inviter_id")
+
+  invitee   Supervisor? @relation(fields: [inviteeId], references: [id], onDelete: Cascade)
+  inviteeId String?     @map("invitee_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("invitations")
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  token     String?   @unique
+  expiredAt DateTime? @map("expired_at")
+
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String  @unique @map("account_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("sessions")
+}
+
+model Profile {
+  id            String  @id @default(uuid())
+  firstName     String  @map("first_name")
+  lastName      String  @map("last_name")
+  headline      String?
+  summary       String? @db.TinyText
+  pictureUrl    String? @map("picture_url")
+  backgroundUrl String? @map("background_url")
+
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String  @unique @map("account_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("profiles")
+}
+
+model Field {
+  id    String @id @default(uuid())
+  title String @unique
+
+  supervisors     Supervisor[]
+  projects        Project[]
+  specializations Specialization[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("fields")
+}
+
+model Specialization {
+  id    String @id @default(uuid())
+  title String @unique
+
+  field   Field?  @relation(fields: [fieldId], references: [id], onDelete: SetNull)
+  fieldId String? @map("field_id")
+
+  projects    Project[]
+  supervisors Supervisor[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("specializations")
+}
+
+model Project {
+  id      String @id @default(uuid())
+  title   String
+  summary String @db.TinyText
+
+  field   Field?  @relation(fields: [fieldId], references: [id], onDelete: SetNull)
+  fieldId String? @map("field_id")
+
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String  @unique @map("student_id")
+
+  specializations Specialization[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}

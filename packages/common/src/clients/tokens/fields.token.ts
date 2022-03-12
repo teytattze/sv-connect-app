@@ -1,0 +1,1 @@
+export const FIELDS_CLIENT = 'FIELDS_CLIENT';

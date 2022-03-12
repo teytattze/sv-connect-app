@@ -1,0 +1,11 @@
+{
+  "extends": "@sv-connect/tsconfig/lib.json",
+  "compilerOptions": {
+    "declarationDir": "./dist/types",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "."
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", ".turbo"]
+}
