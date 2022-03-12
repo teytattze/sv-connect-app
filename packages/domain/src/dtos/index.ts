@@ -20,7 +20,12 @@ export {
   RejectInvitationParam,
 } from './invitations.dto';
 
-export { MatchDto, MatchSingleStudentParam } from './match.dto';
+export {
+  MatchDto,
+  MatchSingleStudentParam,
+  MatchSelectedStudentsAndSupervisorsBody,
+  MatchSelectedStudentsBody,
+} from './match.dto';
 
 export {
   CreateProfileBody,

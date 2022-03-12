@@ -3,7 +3,7 @@ import {
   RpcExceptionFilter as NestRpcExceptionFilter,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { IResponseError, ServiceError } from '@sv-connect/domain/errors';
+import { IResponseError, ServiceError } from '@sv-connect/domain';
 import { Observable, throwError } from 'rxjs';
 
 @Catch(RpcException)

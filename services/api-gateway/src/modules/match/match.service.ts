@@ -5,7 +5,11 @@ import {
   MatchPattern,
   MATCH_CLIENT,
 } from '@sv-connect/common';
-import { IMatch, IMatchClient } from '@sv-connect/domain';
+import {
+  IMatch,
+  IMatchClient,
+  IMatchSelectedStudentsPayload,
+} from '@sv-connect/domain';
 import to from 'await-to-js';
 import { firstValueFrom } from 'rxjs';
 
@@ -17,6 +21,20 @@ export class MatchService implements IMatchClient {
     const [error, result] = await to(
       firstValueFrom(
         this.client.send(MatchPattern.MATCH_SINGLE_STUDENT, { studentId }),
+      ),
+    );
+    if (error) handleClientServiceError(error);
+    return result;
+  }
+
+  async matchSelectedStudents(
+    payload: IMatchSelectedStudentsPayload,
+  ): Promise<IMatch[]> {
+    const [error, result] = await to(
+      firstValueFrom(
+        this.client.send(MatchPattern.MATCH_SELECTED_STUDENTS, {
+          data: payload,
+        }),
       ),
     );
     if (error) handleClientServiceError(error);

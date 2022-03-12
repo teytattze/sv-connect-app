@@ -4,7 +4,7 @@ import {
   HttpException,
   ExceptionFilter,
 } from '@nestjs/common';
-import { IResponseError, ServiceError } from '@sv-connect/domain/errors';
+import { IResponseError, ServiceError } from '@sv-connect/domain';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

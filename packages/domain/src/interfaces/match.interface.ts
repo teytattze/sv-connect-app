@@ -1,3 +1,7 @@
+import {
+  IMatchSelectedStudentsPayload,
+  IMatchSelectedStudentsAndSupervisorsPayload,
+} from '../payloads';
 import { IStudentWithProject } from './students.interface';
 import { ISupervisor } from './supervisors.interface';
 
@@ -10,8 +14,12 @@ export interface IMatch {
 
 export interface IMatchService {
   matchSingleStudent(studentId: string): Promise<IMatch>;
-  matchSelectedStudents(studentIds: string[]): Promise<IMatch[]>;
-  matchSelectedStudentsAndSupervisors(studentIds: string[]): Promise<IMatch[]>;
+  matchSelectedStudents(
+    payload: IMatchSelectedStudentsPayload,
+  ): Promise<IMatch[]>;
+  matchSelectedStudentsAndSupervisors(
+    payload: IMatchSelectedStudentsAndSupervisorsPayload,
+  ): Promise<IMatch[]>;
 }
 
 export interface IMatchClient extends Partial<IMatchService> {}

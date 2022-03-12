@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import {
   IMatch,
+  IMatchSelectedStudentsPayload,
   IProject,
   IStudentWithProject,
   ISupervisor,
@@ -54,6 +55,36 @@ export class MatchService {
       isMatched: true,
       isConfirm: false,
     };
+  }
+
+  async matchSelectedStudent(
+    payload: IMatchSelectedStudentsPayload,
+  ): Promise<IMatch[]> {
+    const { studentIds } = payload;
+    const promises = studentIds.map((id) => this.getStudentAndProject(id));
+    const students = await Promise.all(promises);
+    const projectsByField = new Map<string, IProject[]>();
+    students.forEach((student) => {
+      const project = student.project;
+      const fieldId = project.field.id;
+      if (projectsByField.has(fieldId)) {
+        projectsByField.get(fieldId).push(project);
+      } else {
+        projectsByField.set(fieldId, [project]);
+      }
+    });
+    projectsByField.forEach((value, key) => {
+      console.log(key, value);
+    });
+
+    return [
+      {
+        student: null,
+        supervisor: null,
+        isMatched: false,
+        isConfirm: false,
+      },
+    ];
   }
 
   private async getStudentAndProject(

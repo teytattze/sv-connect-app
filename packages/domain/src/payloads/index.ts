@@ -13,6 +13,11 @@ export type {
 } from './invitations.payload';
 
 export type {
+  IMatchSelectedStudentsAndSupervisorsPayload,
+  IMatchSelectedStudentsPayload,
+} from './match.payload';
+
+export type {
   ICreateProfilePayload,
   IUpdateProfilePayload,
 } from './profiles.payload';
