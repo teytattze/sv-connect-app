@@ -1,5 +1,0 @@
-export {
-  ACCESS_TOKEN_COOKIE_NAME,
-  ACCESS_TOKEN_HEADER_NAME,
-  REFRESH_TOKEN_COOKIE_NAME,
-} from './auth.const';

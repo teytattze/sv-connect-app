@@ -3,7 +3,7 @@ import { isExpired } from '@sv-connect/common';
 import { ILoginPayload, IRefreshAccessPayload } from '@sv-connect/domain';
 import * as bcrypt from 'bcryptjs';
 import config from 'config';
-import { AccountsService } from '../accounts/accounts.service';
+import { AdminAccountsService } from '../accounts/accounts.admin.service';
 import { JwtService } from '../jwt/jwt.service';
 import { SessionsService } from '../sessions/sessions.service';
 import 'dotenv/config';
@@ -13,7 +13,7 @@ export class AuthenticationService {
   private readonly refreshTokenTtl: number;
 
   constructor(
-    private readonly accountsService: AccountsService,
+    private readonly adminAcountsService: AdminAccountsService,
     private readonly jwtService: JwtService,
     private readonly sessionsService: SessionsService,
   ) {
@@ -21,7 +21,7 @@ export class AuthenticationService {
   }
 
   async login(payload: ILoginPayload) {
-    const account = await this.accountsService.adminGetAccountByEmail(
+    const { data: account } = await this.adminAcountsService.getAccountByEmail(
       payload.email,
     );
     if (!account) throw new UnauthorizedException();
@@ -38,9 +38,9 @@ export class AuthenticationService {
       emailVerified: account.emailVerified,
       role: account.role,
     });
-    const session = await this.sessionsService.initializeSessionByAccountId(
-      account.id,
-    );
+
+    const { data: session } =
+      await this.sessionsService.initializeSessionByAccountId(account.id);
 
     return {
       accessToken,
@@ -63,7 +63,7 @@ export class AuthenticationService {
       clockTolerance: this.refreshTokenTtl,
     });
 
-    const session = await this.sessionsService.getSessionByAccountId(
+    const { data: session } = await this.sessionsService.getSessionByAccountId(
       account.id,
     );
 
@@ -83,9 +83,8 @@ export class AuthenticationService {
       emailVerified: account.emailVerified,
       role: account.role,
     });
-    const newSession = await this.sessionsService.initializeSessionByAccountId(
-      account.id,
-    );
+    const { data: newSession } =
+      await this.sessionsService.initializeSessionByAccountId(account.id);
 
     return {
       accessToken: newAccessToken,

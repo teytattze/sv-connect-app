@@ -1,6 +1,6 @@
 import { RpcException } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
-import { ServiceError } from '@sv-connect/domain/errors';
+import { AccountsCode } from '@sv-connect/domain';
 import {
   mockAccounts,
   mockAccountsRepository,
@@ -92,7 +92,7 @@ describe('AccountsService', () => {
       expect(isExisted).toBe(false);
 
       mockAccountsRepository.createAccount.mockReturnValue(mockNewAccount);
-      const account = await service.registerAccount(mockCreateAccountPayload);
+      const account = await service.createAccount(mockCreateAccountPayload);
       expect(account).toEqual(mockNewAccount);
     });
 
@@ -107,10 +107,10 @@ describe('AccountsService', () => {
         ),
       );
       try {
-        await service.registerAccount(mockCreateAccountPayload);
+        await service.createAccount(mockCreateAccountPayload);
       } catch (err) {
         expect(err).toEqual(
-          new RpcException(ServiceError.ACCOUNT_EMAIL_EXISTS),
+          new RpcException(AccountsCode.ACCOUNT_EMAIL_EXISTS),
         );
       }
     });

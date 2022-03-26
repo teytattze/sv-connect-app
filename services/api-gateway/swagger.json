@@ -27,10 +27,10 @@
         ]
       }
     },
-    "/api/accounts/register": {
+    "/api/accounts/create": {
       "post": {
-        "operationId": "registerAccount",
-        "summary": "Register a new user account",
+        "operationId": "createAccount",
+        "summary": "Create a new user account",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -211,7 +211,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Accounts"
+        ]
       }
     },
     "/api/auth/login": {
@@ -260,6 +263,20 @@
         }
       }
     },
+    "/api/fields": {
+      "get": {
+        "operationId": "indexFields",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Fields"
+        ]
+      }
+    },
     "/api/fields/create": {
       "post": {
         "operationId": "createField",
@@ -276,6 +293,85 @@
         },
         "responses": {
           "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Fields"
+        ]
+      }
+    },
+    "/api/fields/{id}": {
+      "get": {
+        "operationId": "getFieldById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Fields"
+        ]
+      }
+    },
+    "/api/fields/update/{id}": {
+      "put": {
+        "operationId": "updateFieldById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFieldBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Fields"
+        ]
+      }
+    },
+    "/api/fields/delete/{id}": {
+      "delete": {
+        "operationId": "deleteFieldById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
             "description": ""
           }
         },
@@ -302,7 +398,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Invitations"
+        ]
       }
     },
     "/api/invitations/accept/{id}": {
@@ -322,7 +421,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Invitations"
+        ]
       }
     },
     "/api/invitations/reject/{id}": {
@@ -342,30 +444,37 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Invitations"
+        ]
       }
     },
-    "/api/match/single/students/{studentId}": {
+    "/api/matches/single/students": {
       "post": {
         "operationId": "matchSingleStudent",
-        "parameters": [
-          {
-            "name": "studentId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchSingleStudentBody"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Matches"
+        ]
       }
     },
-    "/api/match/students": {
+    "/api/matches/selected/students": {
       "post": {
         "operationId": "matchSelectedStudents",
         "parameters": [],
@@ -383,7 +492,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Matches"
+        ]
       }
     },
     "/api/profiles/create": {
@@ -411,6 +523,52 @@
                 }
               }
             }
+          }
+        },
+        "tags": [
+          "Profiles"
+        ]
+      }
+    },
+    "/api/profiles/{id}": {
+      "get": {
+        "operationId": "getProfileById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Profiles"
+        ]
+      }
+    },
+    "/api/profiles/accounts/{accountId}": {
+      "get": {
+        "operationId": "getProfileByAccountId",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         },
         "tags": [
@@ -477,7 +635,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Projects"
+        ]
       }
     },
     "/api/projects/{id}": {
@@ -497,7 +658,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Projects"
+        ]
       }
     },
     "/api/projects/update/{id}": {
@@ -527,7 +691,24 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/api/specializations": {
+      "get": {
+        "operationId": "indexSpecializations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Specializations"
+        ]
       }
     },
     "/api/specializations/create": {
@@ -548,7 +729,89 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Specializations"
+        ]
+      }
+    },
+    "/api/specializations/{id}": {
+      "get": {
+        "operationId": "getSpecializationById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Specializations"
+        ]
+      }
+    },
+    "/api/specializations/update/{id}": {
+      "put": {
+        "operationId": "updateSpecializationById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSpecializationBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Specializations"
+        ]
+      }
+    },
+    "/api/specializations/delete/{id}": {
+      "delete": {
+        "operationId": "deleteSpecializationById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Specializations"
+        ]
       }
     },
     "/api/students/create": {
@@ -569,7 +832,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Students"
+        ]
       }
     },
     "/api/supervisors": {
@@ -578,7 +844,7 @@
         "parameters": [
           {
             "name": "fieldId",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "string"
@@ -586,7 +852,7 @@
           },
           {
             "name": "maxCapacity",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "number"
@@ -594,7 +860,7 @@
           },
           {
             "name": "minCapacity",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "number"
@@ -605,7 +871,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Supervisors"
+        ]
       }
     },
     "/api/supervisors/create": {
@@ -626,7 +895,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "Supervisors"
+        ]
       }
     }
   },
@@ -646,6 +918,14 @@
           "id": {
             "type": "string"
           },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
           "email": {
             "type": "string"
           },
@@ -656,29 +936,16 @@
             "type": "string"
           },
           "role": {
-            "type": "string",
-            "enum": [
-              "STUDENT",
-              "SUPERVISOR",
-              "ADMIN"
-            ]
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "updatedAt": {
-            "format": "date-time",
             "type": "string"
           }
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "email",
           "emailVerified",
-          "role",
-          "createdAt",
-          "updatedAt"
+          "role"
         ]
       },
       "CreateAccountBody": {
@@ -736,18 +1003,74 @@
           "password"
         ]
       },
+      "ConnectSpecializationBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
       "CreateFieldBody": {
         "type": "object",
         "properties": {
           "title": {
             "type": "string"
+          },
+          "specializations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectSpecializationBody"
+            }
           }
         },
         "required": [
           "title"
         ]
       },
-      "ConnectInviterBody": {
+      "DisconnectSpecializationBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateManySpecializationsRelationBody": {
+        "type": "object",
+        "properties": {
+          "connect": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectSpecializationBody"
+            }
+          },
+          "disconnect": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DisconnectSpecializationBody"
+            }
+          }
+        }
+      },
+      "UpdateFieldBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "specializations": {
+            "$ref": "#/components/schemas/UpdateManySpecializationsRelationBody"
+          }
+        }
+      },
+      "ConnectStudentBody": {
         "type": "object",
         "properties": {
           "id": {
@@ -758,7 +1081,7 @@
           "id"
         ]
       },
-      "ConnectInviteeBody": {
+      "ConnectSupervisorBody": {
         "type": "object",
         "properties": {
           "id": {
@@ -783,16 +1106,27 @@
               "REJECTED"
             ]
           },
-          "inviter": {
-            "$ref": "#/components/schemas/ConnectInviterBody"
+          "student": {
+            "$ref": "#/components/schemas/ConnectStudentBody"
           },
-          "invitee": {
-            "$ref": "#/components/schemas/ConnectInviteeBody"
+          "supervisor": {
+            "$ref": "#/components/schemas/ConnectSupervisorBody"
           }
         },
         "required": [
-          "inviter",
-          "invitee"
+          "student",
+          "supervisor"
+        ]
+      },
+      "MatchSingleStudentBody": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "studentId"
         ]
       },
       "MatchSelectedStudentsBody": {
@@ -814,11 +1148,11 @@
         "properties": {
           "id": {
             "type": "string"
+          },
+          "email": {
+            "type": "string"
           }
-        },
-        "required": [
-          "id"
-        ]
+        }
       },
       "CreateProfileBody": {
         "type": "object",
@@ -830,16 +1164,16 @@
             "type": "string"
           },
           "headline": {
-            "type": "string"
+            "type": "object"
           },
           "summary": {
-            "type": "string"
+            "type": "object"
           },
           "pictureUrl": {
-            "type": "string"
+            "type": "object"
           },
           "backgroundUrl": {
-            "type": "string"
+            "type": "object"
           },
           "account": {
             "$ref": "#/components/schemas/ConnectAccountBody"
@@ -857,27 +1191,6 @@
           "id": {
             "type": "string"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "headline": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "pictureUrl": {
-            "type": "string"
-          },
-          "backgroundUrl": {
-            "type": "string"
-          },
-          "accountId": {
-            "type": "string"
-          },
           "createdAt": {
             "format": "date-time",
             "type": "string"
@@ -885,19 +1198,40 @@
           "updatedAt": {
             "format": "date-time",
             "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "object"
+          },
+          "summary": {
+            "type": "object"
+          },
+          "pictureUrl": {
+            "type": "object"
+          },
+          "backgroundUrl": {
+            "type": "object"
+          },
+          "accountId": {
+            "type": "string"
           }
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "firstName",
           "lastName",
           "headline",
           "summary",
           "pictureUrl",
           "backgroundUrl",
-          "accountId",
-          "createdAt",
-          "updatedAt"
+          "accountId"
         ]
       },
       "UpdateProfileBody": {
@@ -910,42 +1244,20 @@
             "type": "string"
           },
           "headline": {
-            "type": "string"
+            "type": "object"
           },
           "summary": {
-            "type": "string"
+            "type": "object"
           },
           "pictureUrl": {
-            "type": "string"
+            "type": "object"
           },
           "backgroundUrl": {
-            "type": "string"
+            "type": "object"
           }
         }
       },
       "ConnectFieldBody": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        }
-      },
-      "ConnectStudentBody": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "ConnectSpecializationBody": {
         "type": "object",
         "properties": {
           "id": {
@@ -968,22 +1280,34 @@
           "field": {
             "$ref": "#/components/schemas/ConnectFieldBody"
           },
-          "student": {
-            "$ref": "#/components/schemas/ConnectStudentBody"
-          },
           "specializations": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ConnectSpecializationBody"
             }
+          },
+          "student": {
+            "$ref": "#/components/schemas/ConnectStudentBody"
           }
         },
         "required": [
           "title",
           "summary",
-          "student",
-          "specializations"
+          "field",
+          "specializations",
+          "student"
         ]
+      },
+      "UpdateOneFieldRelationBody": {
+        "type": "object",
+        "properties": {
+          "connect": {
+            "$ref": "#/components/schemas/ConnectFieldBody"
+          },
+          "disconnect": {
+            "type": "boolean"
+          }
+        }
       },
       "UpdateProjectBody": {
         "type": "object",
@@ -995,13 +1319,10 @@
             "type": "string"
           },
           "field": {
-            "$ref": "#/components/schemas/ConnectFieldBody"
+            "$ref": "#/components/schemas/UpdateOneFieldRelationBody"
           },
           "specializations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ConnectSpecializationBody"
-            }
+            "$ref": "#/components/schemas/UpdateManySpecializationsRelationBody"
           }
         }
       },
@@ -1011,25 +1332,55 @@
           "title": {
             "type": "string"
           },
-          "field": {
-            "$ref": "#/components/schemas/ConnectFieldBody"
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectFieldBody"
+            }
           }
         },
         "required": [
-          "title",
-          "field"
+          "title"
         ]
       },
-      "ConnectSupervisorBody": {
+      "DisconnectFieldBody": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
+          },
+          "title": {
+            "type": "string"
           }
-        },
-        "required": [
-          "id"
-        ]
+        }
+      },
+      "UpdateManyFieldsRelationBody": {
+        "type": "object",
+        "properties": {
+          "connect": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectFieldBody"
+            }
+          },
+          "disconnect": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DisconnectFieldBody"
+            }
+          }
+        }
+      },
+      "UpdateSpecializationBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/UpdateManyFieldsRelationBody"
+          }
+        }
       },
       "CreateStudentBody": {
         "type": "object",
@@ -1066,6 +1417,7 @@
         },
         "required": [
           "account",
+          "field",
           "specializations"
         ]
       }

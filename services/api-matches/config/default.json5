@@ -1,0 +1,53 @@
+{
+  server: {
+    host: '127.0.0.1',
+    port: 8012,
+    secure: false,
+  },
+  service: {
+    name: 'match',
+    alias: 'api-match',
+    transporter: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_matches_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+  },
+  microservices: {
+    projects: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_projects_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    supervisors: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_supervisors_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+    students: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_students_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+  },
+}

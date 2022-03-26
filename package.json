@@ -10,6 +10,7 @@
   "scripts": {
     "start": "turbo run start --parallel",
     "build": "turbo run build",
+    "build:packages": "turbo run build --scope=@sv-connect/domain --no-deps && turbo run build --scope=@sv-connect/common --no-deps",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "lint": "turbo run lint",
@@ -17,9 +18,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@prisma/client": "^3.6.0"
+    "@ngneat/falso": "^3.0.0",
+    "@prisma/client": "^3.6.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "husky": "^7.0.0",
     "prettier": "^2.5.1",
     "prisma": "^3.6.0",

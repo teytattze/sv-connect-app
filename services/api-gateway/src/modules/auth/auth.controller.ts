@@ -9,6 +9,7 @@ import 'dotenv/config';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   ACCESS_TOKEN_HEADER_NAME,
+  CoreApiResponse,
   LoginBody,
   REFRESH_TOKEN_COOKIE_NAME,
 } from '@sv-connect/domain';
@@ -36,7 +37,9 @@ export class AuthController {
     @Body() body: LoginBody,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { accessToken, refreshToken } = await this.authService.login(body);
+    const {
+      data: { accessToken, refreshToken },
+    } = await this.authService.login(body);
 
     response.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
       maxAge: this.refreshTokenTTL * 1000,
@@ -45,7 +48,7 @@ export class AuthController {
       maxAge: this.refreshTokenTTL * 1000,
     });
 
-    return { message: 'Login successfully' };
+    return CoreApiResponse.success(null, 'Login successfully');
   }
 
   @Auth()
@@ -67,7 +70,7 @@ export class AuthController {
     response.clearCookie(ACCESS_TOKEN_COOKIE_NAME, { maxAge: 0 });
     response.clearCookie(REFRESH_TOKEN_COOKIE_NAME, { maxAge: 0 });
 
-    return { message: 'Logout successfully' };
+    return CoreApiResponse.success(null, 'Logout successfully');
   }
 
   @Post('access/refresh')
@@ -86,8 +89,9 @@ export class AuthController {
     const refreshToken = request.cookies[REFRESH_TOKEN_COOKIE_NAME];
     const accessToken = request.headers[ACCESS_TOKEN_HEADER_NAME];
 
-    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-      await this.authService.refreshAccess({ accessToken, refreshToken });
+    const {
+      data: { accessToken: newAccessToken, refreshToken: newRefreshToken },
+    } = await this.authService.refreshAccess({ accessToken, refreshToken });
 
     response.cookie(ACCESS_TOKEN_COOKIE_NAME, newAccessToken, {
       maxAge: this.refreshTokenTTL * 1000,
@@ -96,6 +100,6 @@ export class AuthController {
       maxAge: this.refreshTokenTTL * 1000,
     });
 
-    return { message: 'Refresh authorization successfully' };
+    return CoreApiResponse.success(null, 'Access refresh successfully');
   }
 }

@@ -1,11 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { PROFILES_CLIENT, ProfilesPattern } from '@sv-connect/common';
 import {
-  handleClientServiceError,
-  PROFILES_CLIENT,
-  ProfilesPattern,
-} from '@sv-connect/common';
-import {
+  CoreApiException,
+  ICoreApiResponse,
   ICreateProfilePayload,
   IProfile,
   IProfilesClient,
@@ -18,21 +16,59 @@ import { firstValueFrom } from 'rxjs';
 export class ProfilesService implements IProfilesClient {
   constructor(@Inject(PROFILES_CLIENT) private readonly client: ClientProxy) {}
 
-  async createProfile(payload: ICreateProfilePayload): Promise<IProfile> {
-    const [err, profile] = await to(
+  async getProfileById(id: string): Promise<ICoreApiResponse<IProfile>> {
+    const [error, response] = await to<
+      ICoreApiResponse<IProfile>,
+      ICoreApiResponse<null>
+    >(
+      firstValueFrom(
+        this.client.send(ProfilesPattern.GET_PROFILE_BY_ID, { id }),
+      ),
+    );
+    if (error) throw CoreApiException.new(error);
+    return response;
+  }
+
+  async getProfileByAccountId(
+    accountId: string,
+  ): Promise<ICoreApiResponse<IProfile>> {
+    const [error, response] = await to<
+      ICoreApiResponse<IProfile>,
+      ICoreApiResponse<null>
+    >(
+      firstValueFrom(
+        this.client.send(ProfilesPattern.GET_PROFILE_BY_ACCOUNT_ID, {
+          accountId,
+        }),
+      ),
+    );
+    if (error) throw CoreApiException.new(error);
+    return response;
+  }
+
+  async createProfile(
+    payload: ICreateProfilePayload,
+  ): Promise<ICoreApiResponse<IProfile>> {
+    const [error, response] = await to<
+      ICoreApiResponse<IProfile>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(ProfilesPattern.CREATE_PROFILE, { data: payload }),
       ),
     );
-    if (err) handleClientServiceError(err);
-    return profile;
+    if (error) throw CoreApiException.new(error);
+    return response;
   }
 
   async updateProfileByAccountId(
     accountId: string,
     payload: IUpdateProfilePayload,
-  ): Promise<IProfile> {
-    const [err, profile] = await to(
+  ): Promise<ICoreApiResponse<IProfile>> {
+    const [error, response] = await to<
+      ICoreApiResponse<IProfile>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(ProfilesPattern.UPDATE_PROFILE_BY_ACCOUNT_ID, {
           accountId,
@@ -40,7 +76,7 @@ export class ProfilesService implements IProfilesClient {
         }),
       ),
     );
-    if (err) handleClientServiceError(err);
-    return profile;
+    if (error) throw CoreApiException.new(error);
+    return response;
   }
 }

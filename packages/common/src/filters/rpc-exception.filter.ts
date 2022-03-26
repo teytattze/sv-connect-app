@@ -3,7 +3,7 @@ import {
   RpcExceptionFilter as NestRpcExceptionFilter,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { IResponseError, ServiceError } from '@sv-connect/domain';
+import { CoreApiResponse, GeneralCode, ICode } from '@sv-connect/domain';
 import { Observable, throwError } from 'rxjs';
 
 @Catch(RpcException)
@@ -11,22 +11,25 @@ export class RpcExceptionFilter
   implements NestRpcExceptionFilter<RpcException>
 {
   catch(ex: RpcException): Observable<any> {
-    console.log(ex.getError());
     return throwError(() => this.handleException(ex));
   }
 
-  private handleException(ex: RpcException): IResponseError {
-    const error = ex.getError() as any;
-    if (!error) return ServiceError.UNKNOWN;
+  private handleException(ex: RpcException): CoreApiResponse<null> {
+    const error = ex.getError() as ICode;
 
-    if (error instanceof Object) {
-      return {
-        message: error.message || ServiceError.UNKNOWN.message,
-        errorCode: error.errorCode || ServiceError.UNKNOWN.errorCode,
-        statusCode: error.statusCode || ServiceError.UNKNOWN.statusCode,
-      };
-    }
+    const resultStatusCode =
+      error?.statusCode || GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
+    const resultMessage =
+      error?.message || GeneralCode.INTERNAL_SERVER_ERROR.message;
+    const resultErrorCode =
+      error?.errorCode || GeneralCode.INTERNAL_SERVER_ERROR.errorCode;
+    const resultData = null;
 
-    return { ...ServiceError.UNKNOWN, message: error.message };
+    return CoreApiResponse.error(
+      resultStatusCode,
+      resultMessage,
+      resultErrorCode,
+      resultData,
+    );
   }
 }

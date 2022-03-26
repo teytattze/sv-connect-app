@@ -10,19 +10,19 @@ const CREATE_SESSION = {
   operationId: 'createSession',
 };
 
-const INITIALIZE_SESSION = {
+const INITIALIZE_SESSION_BY_ACCOUNT_ID = {
   service: BASE_SERVICE,
-  operationId: 'initializeSession',
+  operationId: 'initializeSessionByAccountId',
 };
 
-const INVALIDATE_SESSION = {
+const INVALIDATE_SESSION_BY_ACCOUNT_ID = {
   service: BASE_SERVICE,
-  operationId: 'invalidateSession',
+  operationId: 'invalidateSessionByAccountId',
 };
 
 export const SessionsPattern = {
   GET_SESSION_BY_ACCOUNT_ID,
   CREATE_SESSION,
-  INITIALIZE_SESSION,
-  INVALIDATE_SESSION,
+  INITIALIZE_SESSION_BY_ACCOUNT_ID,
+  INVALIDATE_SESSION_BY_ACCOUNT_ID,
 };

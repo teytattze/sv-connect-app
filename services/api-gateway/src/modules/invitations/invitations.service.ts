@@ -1,11 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { INVITATIONS_CLIENT, InvitationsPattern } from '@sv-connect/common';
 import {
-  handleClientServiceError,
-  INVITATIONS_CLIENT,
-  InvitationsPattern,
-} from '@sv-connect/common';
-import {
+  CoreApiException,
+  ICoreApiResponse,
   ICreateInvitationPayload,
   IInvitation,
   IInvitationsClient,
@@ -21,35 +19,48 @@ export class InvitationsService implements IInvitationsClient {
 
   async createInvitation(
     payload: ICreateInvitationPayload,
-  ): Promise<IInvitation> {
-    const [err, invitation] = await to(
+  ): Promise<ICoreApiResponse<IInvitation>> {
+    const [error, response] = await to<
+      ICoreApiResponse<IInvitation>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(InvitationsPattern.CREATE_INVITATION, {
           data: payload,
         }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
+    return response;
+  }
+
+  async acceptInvitationById(
+    id: string,
+  ): Promise<ICoreApiResponse<IInvitation>> {
+    const [error, invitation] = await to<
+      ICoreApiResponse<IInvitation>,
+      ICoreApiResponse<null>
+    >(
+      firstValueFrom(
+        this.client.send(InvitationsPattern.ACCEPT_INVITATION_BY_ID, { id }),
+      ),
+    );
+    if (error) throw CoreApiException.new(error);
     return invitation;
   }
 
-  async acceptInvitation(id: string): Promise<IInvitation> {
-    const [err, invitation] = await to(
+  async rejectInvitationById(
+    id: string,
+  ): Promise<ICoreApiResponse<IInvitation>> {
+    const [error, invitation] = await to<
+      ICoreApiResponse<IInvitation>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
-        this.client.send(InvitationsPattern.ACCEPT_INVITATION, { id }),
+        this.client.send(InvitationsPattern.REJECT_INVITATION_BY_ID, { id }),
       ),
     );
-    if (err) handleClientServiceError(err);
-    return invitation;
-  }
-
-  async rejectInvitation(id: string): Promise<IInvitation> {
-    const [err, invitation] = await to(
-      firstValueFrom(
-        this.client.send(InvitationsPattern.REJECT_INVITATION, { id }),
-      ),
-    );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
     return invitation;
   }
 }

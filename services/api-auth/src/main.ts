@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { RpcExceptionFilter } from '@sv-connect/common';
+import { ApiResponseInterceptor, RpcExceptionFilter } from '@sv-connect/common';
 import config from 'config';
 import { AppModule } from './app.module';
 import 'dotenv/config';
@@ -13,6 +13,8 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new RpcExceptionFilter());
+  app.useGlobalInterceptors(new ApiResponseInterceptor());
+
   await app.listen();
 }
 bootstrap()

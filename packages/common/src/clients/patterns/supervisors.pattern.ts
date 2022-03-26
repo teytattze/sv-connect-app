@@ -20,9 +20,19 @@ const CREATE_SUPERVISOR = {
   operationId: 'createSupervisor',
 };
 
+const UPDATE_SUPERVISOR_BY_ID = {
+  service: BASE_SERVICE,
+  operationId: 'updateSupervisorById',
+};
+
 const UPDATE_SUPERVISOR_BY_ACCOUNT_ID = {
   service: BASE_SERVICE,
   operationId: 'updateSupervisorByAccountId',
+};
+
+const DELETE_SUPERVISOR_BY_ID = {
+  service: BASE_SERVICE,
+  operationId: 'deleteSupervisorById',
 };
 
 export const SupervisorsPattern = {
@@ -30,5 +40,7 @@ export const SupervisorsPattern = {
   GET_SUPERVISOR_BY_ID,
   GET_SUPERVISOR_BY_ACCOUNT_ID,
   CREATE_SUPERVISOR,
+  UPDATE_SUPERVISOR_BY_ID,
   UPDATE_SUPERVISOR_BY_ACCOUNT_ID,
+  DELETE_SUPERVISOR_BY_ID,
 };

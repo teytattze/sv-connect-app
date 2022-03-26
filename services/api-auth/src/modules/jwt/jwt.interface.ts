@@ -1,4 +1,4 @@
-import { AccountRole } from '@sv-connect/domain';
+import { AccountRole } from '@prisma/client';
 import * as jose from 'jose';
 
 export interface JwtAccount {

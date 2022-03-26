@@ -1,8 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AccountDto, AdminGetAccountByEmailParam } from '@sv-connect/domain';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  AccountDto,
+  AdminGetAccountByEmailParam,
+  CoreApiResponse,
+} from '@sv-connect/domain';
 import { AccountsService } from './accounts.service';
 
+@ApiTags('Accounts')
 @Controller('accounts/admin')
 export class AdminAccountsController {
   constructor(private readonly accountsService: AccountsService) {}
@@ -18,8 +23,9 @@ export class AdminAccountsController {
     summary: 'Get an user account by account email with admin authority',
   })
   async adminGetAccountByEmail(
-    @Param() params: AdminGetAccountByEmailParam,
-  ): Promise<AccountDto> {
-    return await this.accountsService.adminGetAccountByEmail(params.email);
+    @Param() { email }: AdminGetAccountByEmailParam,
+  ): Promise<CoreApiResponse<AccountDto>> {
+    const { data } = await this.accountsService.adminGetAccountByEmail(email);
+    return CoreApiResponse.success(data, 'Get account successfully');
   }
 }

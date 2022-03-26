@@ -24,8 +24,8 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { SpecializationsModule } from './modules/specializations/specializations.module';
 import { StudentsModule } from './modules/students/students.module';
 import { SupervisorsModule } from './modules/supervisors/supervisors.module';
+import { MatchesModule } from './modules/matches/matches.module';
 import 'dotenv/config';
-import { MatchModule } from './modules/match/match.module';
 
 const clientsProviderOptions: IClientsProviderOptions[] = [
   {
@@ -77,7 +77,7 @@ const clientsProviderOptions: IClientsProviderOptions[] = [
     ClientsProvider.register(clientsProviderOptions),
     FieldsModule,
     InvitationsModule,
-    MatchModule,
+    MatchesModule,
     JwtModule,
     ProfilesModule,
     ProjectsModule,

@@ -41,6 +41,7 @@ model Supervisor {
   field   Field?  @relation(fields: [fieldId], references: [id], onDelete: SetNull)
   fieldId String? @map("field_id")
 
+  matches         Match[]
   invitations     Invitation[]
   students        Student[]
   specializations Specialization[]
@@ -60,6 +61,7 @@ model Student {
   supervisor   Supervisor? @relation(fields: [supervisorId], references: [id], onDelete: SetNull)
   supervisorId String?     @map("supervisor_id")
 
+  matches     Match[]
   invitations Invitation[]
   project     Project?
 
@@ -74,11 +76,11 @@ model Invitation {
   message String?
   status  InvitationStatus @default(PENDING)
 
-  inviter   Student? @relation(fields: [inviterId], references: [id], onDelete: Cascade)
-  inviterId String?  @map("inviter_id")
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String?  @map("student_id")
 
-  invitee   Supervisor? @relation(fields: [inviteeId], references: [id], onDelete: Cascade)
-  inviteeId String?     @map("invitee_id")
+  supervisor   Supervisor? @relation(fields: [supervisorId], references: [id], onDelete: Cascade)
+  supervisorId String?     @map("supervisor_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -142,9 +144,7 @@ model Specialization {
   id    String @id @default(uuid())
   title String @unique
 
-  field   Field?  @relation(fields: [fieldId], references: [id], onDelete: SetNull)
-  fieldId String? @map("field_id")
-
+  fields      Field[]
   projects    Project[]
   supervisors Supervisor[]
 
@@ -171,4 +171,23 @@ model Project {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("projects")
+}
+
+model Match {
+  id     String      @id @default(uuid())
+  status MatchStatus @default(PENDING)
+
+  students    Student[]
+  supervisors Supervisor[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("matches")
+}
+
+enum MatchStatus {
+  PENDING
+  APPROVED
+  INVALID
 }

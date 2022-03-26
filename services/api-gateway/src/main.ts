@@ -1,6 +1,9 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { HttpExceptionFilter } from '@sv-connect/common';
+import {
+  ApiResponseInterceptor,
+  HttpExceptionFilter,
+} from '@sv-connect/common';
 import cookieParser from 'cookie-parser';
 import config from 'config';
 import helmet from 'helmet';
@@ -17,6 +20,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(helmet());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new ApiResponseInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

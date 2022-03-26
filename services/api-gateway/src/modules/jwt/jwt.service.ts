@@ -32,9 +32,10 @@ export class JwtService {
   }
 
   async getPublicKey() {
-    const publicPem = fs.readFileSync(join(process.cwd(), this.publicKeyPath), {
-      encoding: 'utf-8',
-    });
+    const publicPem = fs.readFileSync(
+      join(process.cwd(), `${this.publicKeyPath}`),
+      { encoding: 'utf-8' },
+    );
     return await jose.importSPKI(publicPem, this.alg);
   }
 }

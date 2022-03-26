@@ -13,12 +13,12 @@ export class InvitationsRepository {
     id: true,
     message: true,
     status: true,
-    inviteeId: true,
-    inviterId: true,
+    studentId: true,
+    supervisorId: true,
     createdAt: true,
     updatedAt: true,
-    invitee: false,
-    inviter: false,
+    student: false,
+    supervisor: false,
   };
 
   constructor(private readonly prisma: PrismaService) {}
@@ -26,32 +26,28 @@ export class InvitationsRepository {
   async createInvitation(
     payload: ICreateInvitationPayload,
   ): Promise<IInvitation> {
-    try {
-      return (await this.prisma.invitation.create({
-        data: {
-          message: payload.message,
-          status: payload.status,
-          inviter: { connect: payload.inviter },
-          invitee: { connect: payload.invitee },
-        },
-        select: this.defaultSelect,
-      })) as IInvitation;
-    } catch (e) {}
+    return (await this.prisma.invitation.create({
+      data: {
+        message: payload.message,
+        status: payload.status,
+        student: { connect: payload.student },
+        supervisor: { connect: payload.supervisor },
+      },
+      select: this.defaultSelect,
+    })) as IInvitation;
   }
 
   async updateInvitation(
     by: Prisma.InvitationWhereUniqueInput,
     payload: IUpdateInvitationPayload,
   ): Promise<IInvitation> {
-    try {
-      return (await this.prisma.invitation.update({
-        where: { id: by.id },
-        data: {
-          message: payload.message,
-          status: payload.status,
-        },
-        select: this.defaultSelect,
-      })) as IInvitation;
-    } catch (e) {}
+    return (await this.prisma.invitation.update({
+      where: { id: by.id },
+      data: {
+        message: payload.message,
+        status: payload.status,
+      },
+      select: this.defaultSelect,
+    })) as IInvitation;
   }
 }

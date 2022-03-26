@@ -12,7 +12,7 @@ import 'dotenv/config';
 const clientsProviderOptions: IClientsProviderOptions[] = [
   {
     provide: INVITATIONS_CLIENT,
-    transport: config.get('microservices.invitations'),
+    transport: config.get('microservices.accounts'),
   },
 ];
 

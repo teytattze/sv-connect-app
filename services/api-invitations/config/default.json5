@@ -28,4 +28,16 @@
     property: 'charset=utf8mb4&parseTime=True&loc=Local',
     url: 'mysql://root:password@localhost:3306/sv_connect_app?charset=utf8mb4&parseTime=True&loc=Local',
   },
+  microservices: {
+    accounts: {
+      transport: 5,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'service_accounts_queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
+  },
 }

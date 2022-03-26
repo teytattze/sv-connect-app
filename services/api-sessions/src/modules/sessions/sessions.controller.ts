@@ -2,6 +2,8 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { SessionsPattern } from '@sv-connect/common';
 import {
+  CoreApiResponse,
+  ICoreApiResponse,
   ICreateSessionPayload,
   ISession,
   ISessionsClient,
@@ -15,28 +17,36 @@ export class SessionsController implements ISessionsClient {
   @MessagePattern(SessionsPattern.GET_SESSION_BY_ACCOUNT_ID)
   async getSessionByAccountId(
     @Payload('accountId') accountId: string,
-  ): Promise<ISession> {
-    return await this.sessionsService.getSessionByAccountId(accountId);
+  ): Promise<ICoreApiResponse<ISession>> {
+    const session = await this.sessionsService.getSessionByAccountId(accountId);
+    return CoreApiResponse.success(session);
   }
 
   @MessagePattern(SessionsPattern.CREATE_SESSION)
   async registerSession(
     @Payload('data') payload: ICreateSessionPayload,
-  ): Promise<ISession> {
-    return await this.sessionsService.registerSession(payload);
+  ): Promise<ICoreApiResponse<ISession>> {
+    const session = await this.sessionsService.createSession(payload);
+    return CoreApiResponse.success(session);
   }
 
-  @MessagePattern(SessionsPattern.INITIALIZE_SESSION)
+  @MessagePattern(SessionsPattern.INITIALIZE_SESSION_BY_ACCOUNT_ID)
   async initializeSessionByAccountId(
     @Payload('accountId') accountId: string,
-  ): Promise<ISession> {
-    return await this.sessionsService.initializeSession(accountId);
+  ): Promise<ICoreApiResponse<ISession>> {
+    const session = await this.sessionsService.initializeSessionByAccountId(
+      accountId,
+    );
+    return CoreApiResponse.success(session);
   }
 
-  @MessagePattern(SessionsPattern.INVALIDATE_SESSION)
+  @MessagePattern(SessionsPattern.INVALIDATE_SESSION_BY_ACCOUNT_ID)
   async invalidateSessionByAccountId(
     @Payload('accountId') accountId: string,
-  ): Promise<ISession> {
-    return await this.sessionsService.invalidateSession(accountId);
+  ): Promise<ICoreApiResponse<ISession>> {
+    const session = await this.sessionsService.invalidateSessionByAccountId(
+      accountId,
+    );
+    return CoreApiResponse.success(session);
   }
 }

@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
+  CoreApiResponse,
   CreateProjectBody,
   GetProjectByIdParam,
   ProjectDto,
@@ -8,27 +10,33 @@ import {
 } from '@sv-connect/domain';
 import { ProjectsService } from './projects.service';
 
+@ApiTags('Projects')
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post('create')
-  async createProject(@Body() body: CreateProjectBody): Promise<ProjectDto> {
-    return await this.projectsService.createProject(body);
+  async createProject(
+    @Body() body: CreateProjectBody,
+  ): Promise<CoreApiResponse<ProjectDto>> {
+    const { data } = await this.projectsService.createProject(body);
+    return CoreApiResponse.success(data);
   }
 
   @Get(':id')
   async getProjectById(
-    @Param() param: GetProjectByIdParam,
-  ): Promise<ProjectDto> {
-    return await this.projectsService.getProjectById(param.id);
+    @Param() { id }: GetProjectByIdParam,
+  ): Promise<CoreApiResponse<ProjectDto>> {
+    const { data } = await this.projectsService.getProjectById(id);
+    return CoreApiResponse.success(data);
   }
 
   @Put('update/:id')
   async updateProjectById(
-    @Param() param: UpdateProjectByIdParam,
+    @Param() { id }: UpdateProjectByIdParam,
     @Body() body: UpdateProjectBody,
-  ): Promise<ProjectDto> {
-    return await this.projectsService.updateProjectById(param.id, body);
+  ): Promise<CoreApiResponse<ProjectDto>> {
+    const { data } = await this.projectsService.updateProjectById(id, body);
+    return CoreApiResponse.success(data);
   }
 }

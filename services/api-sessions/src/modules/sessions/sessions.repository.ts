@@ -6,8 +6,6 @@ import {
   IUpdateSessionPayload,
 } from '@sv-connect/domain';
 import { PrismaService } from '@sv-connect/common';
-import to from 'await-to-js';
-import { handleRepositoryError } from './sessions.helper';
 
 @Injectable()
 export class SessionsRepository {
@@ -24,46 +22,42 @@ export class SessionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findSession(by: Prisma.SessionWhereUniqueInput): Promise<ISession> {
-    const [err, session] = await to(
-      this.prisma.session.findUnique({
-        where: { id: by.id, accountId: by.accountId, token: by.token },
-        select: this.defaultSelect,
-      }),
-    );
-    if (err) handleRepositoryError(err);
-    return session as ISession;
+    return (await this.prisma.session.findUnique({
+      where: {
+        id: by.id,
+        accountId: by.accountId,
+        token: by.token,
+      },
+      select: this.defaultSelect,
+    })) as ISession;
   }
 
   async createSession(payload: ICreateSessionPayload): Promise<ISession> {
-    const [err, session] = await to(
-      this.prisma.session.create({
-        data: {
-          account: {
-            connect: payload.account,
-          },
+    return (await this.prisma.session.create({
+      data: {
+        account: {
+          connect: payload.account,
         },
-        select: this.defaultSelect,
-      }),
-    );
-    if (err) handleRepositoryError(err);
-    return session as ISession;
+      },
+      select: this.defaultSelect,
+    })) as ISession;
   }
 
   async updateSession(
     by: Prisma.SessionWhereUniqueInput,
     payload: IUpdateSessionPayload,
-  ) {
-    const [err, session] = await to(
-      this.prisma.session.update({
-        where: { id: by.id, accountId: by.accountId, token: by.token },
-        data: {
-          token: payload.token,
-          expiredAt: payload.expiredAt,
-        },
-        select: this.defaultSelect,
-      }),
-    );
-    if (err) handleRepositoryError(err);
-    return session as ISession;
+  ): Promise<ISession> {
+    return (await this.prisma.session.update({
+      where: {
+        id: by.id,
+        accountId: by.accountId,
+        token: by.token,
+      },
+      data: {
+        token: payload.token,
+        expiredAt: payload.expiredAt,
+      },
+      select: this.defaultSelect,
+    })) as ISession;
   }
 }

@@ -67,7 +67,7 @@
       transport: 5,
       options: {
         urls: ['amqp://localhost:5672'],
-        queue: 'service_match_queue',
+        queue: 'service_matches_queue',
         queueOptions: {
           durable: false,
         },

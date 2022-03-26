@@ -1,17 +1,17 @@
 import { RpcException } from '@nestjs/microservices';
-import { PrismaErrorCode, ServiceError } from '@sv-connect/domain';
+import { PrismaErrorCode, AccountsCode, GeneralCode } from '@sv-connect/domain';
 import { Prisma } from '@prisma/client';
 
-export const handleRepositoryError = (err: any) => {
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    switch (err.code) {
+export const handlePrismaError = <TError = any>(error: TError) => {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    switch (error.code) {
       case PrismaErrorCode.NOT_FOUND:
-        throw new RpcException(ServiceError.ACCOUNT_NOT_FOUND);
+        throw new RpcException(AccountsCode.ACCOUNT_NOT_FOUND);
       case PrismaErrorCode.UNIQUE_CONSTRAINT:
-        throw new RpcException(ServiceError.ACCOUNT_EMAIL_EXISTS);
+        throw new RpcException(AccountsCode.ACCOUNT_EMAIL_EXISTS);
       default:
         break;
     }
   }
-  throw new RpcException(ServiceError.UNKNOWN);
+  throw new RpcException(GeneralCode.INTERNAL_SERVER_ERROR);
 };

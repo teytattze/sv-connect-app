@@ -1,13 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { ACCOUNTS_CLIENT, AccountsPattern } from '@sv-connect/common';
 import {
-  handleClientServiceError,
-  ACCOUNTS_CLIENT,
-  AccountsPattern,
-} from '@sv-connect/common';
-import {
+  CoreApiException,
   IAccount,
   IAccountsClient,
+  ICoreApiResponse,
   ICreateAccountPayload,
   IUpdateAccountPayload,
 } from '@sv-connect/domain';
@@ -18,59 +16,79 @@ import { firstValueFrom } from 'rxjs';
 export class AccountsService implements IAccountsClient {
   constructor(@Inject(ACCOUNTS_CLIENT) private readonly client: ClientProxy) {}
 
-  async adminGetAccountByEmail(email: string): Promise<IAccount> {
-    const [err, account] = await to(
+  async adminGetAccountByEmail(
+    email: string,
+  ): Promise<ICoreApiResponse<IAccount>> {
+    const [error, account] = await to<
+      ICoreApiResponse<IAccount>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(AccountsPattern.ADMIN_GET_ACCOUNT_BY_EMAIL, { email }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
     return account;
   }
 
-  async indexAccounts(): Promise<IAccount[]> {
-    const [err, accounts] = await to(
-      firstValueFrom(this.client.send(AccountsPattern.INDEX_ACCOUNTS, {})),
-    );
-    if (err) handleClientServiceError(err);
+  async indexAccounts(): Promise<ICoreApiResponse<IAccount[]>> {
+    const [error, accounts] = await to<
+      ICoreApiResponse<IAccount[]>,
+      ICoreApiResponse<null>
+    >(firstValueFrom(this.client.send(AccountsPattern.INDEX_ACCOUNTS, {})));
+    if (error) throw CoreApiException.new(error);
     return accounts;
   }
 
-  async getAccountById(id: string): Promise<IAccount> {
-    const [err, account] = await to(
+  async getAccountById(id: string): Promise<ICoreApiResponse<IAccount>> {
+    const [error, account] = await to<
+      ICoreApiResponse<IAccount>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(AccountsPattern.GET_ACCOUNT_BY_ID, { id }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
     return account;
   }
 
-  async getAccountByEmail(email: string): Promise<IAccount> {
-    const [err, account] = await to(
+  async getAccountByEmail(email: string): Promise<ICoreApiResponse<IAccount>> {
+    const [error, account] = await to<
+      ICoreApiResponse<IAccount>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(AccountsPattern.GET_ACCOUNT_BY_EMAIL, { email }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
     return account;
   }
 
-  async registerAccount(payload: ICreateAccountPayload): Promise<IAccount> {
-    const [err, account] = await to(
+  async createAccount(
+    payload: ICreateAccountPayload,
+  ): Promise<ICoreApiResponse<IAccount>> {
+    const [error, account] = await to<
+      ICoreApiResponse<IAccount>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(AccountsPattern.CREATE_ACCOUNT, { data: payload }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
     return account;
   }
 
   async updateAccountById(
     id: string,
     payload: IUpdateAccountPayload,
-  ): Promise<IAccount> {
-    const [err, account] = await to(
+  ): Promise<ICoreApiResponse<IAccount>> {
+    const [error, account] = await to<
+      ICoreApiResponse<IAccount>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(AccountsPattern.UPDATE_ACCOUNT_BY_ID, {
           id,
@@ -78,16 +96,20 @@ export class AccountsService implements IAccountsClient {
         }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
     return account;
   }
 
-  async deleteAccountById(id: string): Promise<void> {
-    const [err] = await to(
+  async deleteAccountById(id: string): Promise<ICoreApiResponse<null>> {
+    const [error, result] = await to<
+      ICoreApiResponse<null>,
+      ICoreApiResponse<null>
+    >(
       firstValueFrom(
         this.client.send(AccountsPattern.DELETE_ACCOUNT_BY_ID, { id }),
       ),
     );
-    if (err) handleClientServiceError(err);
+    if (error) throw CoreApiException.new(error);
+    return result;
   }
 }

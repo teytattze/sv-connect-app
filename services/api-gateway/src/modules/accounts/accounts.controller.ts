@@ -16,6 +16,7 @@ import {
   GetAccountByIdParam,
   UpdateAccountByIdParam,
   UpdateAccountBody,
+  CoreApiResponse,
 } from '@sv-connect/domain';
 import { AccountsService } from './accounts.service';
 
@@ -35,22 +36,31 @@ export class AccountsController {
     operationId: 'indexAccounts',
     description: 'Index all user accounts',
   })
-  async indexAccount(): Promise<AccountDto[]> {
-    return await this.accountsService.indexAccounts();
+  async indexAccount(): Promise<CoreApiResponse<AccountDto[]>> {
+    const { data } = await this.accountsService.indexAccounts();
+    return CoreApiResponse.success(data, 'Accounts indexed successfully');
   }
 
-  @Post('register')
+  @Post('create')
   @ApiResponse({
     status: 200,
     description: 'Created',
     type: AccountDto,
   })
   @ApiOperation({
-    operationId: 'registerAccount',
-    summary: 'Register a new user account',
+    operationId: 'createAccount',
+    summary: 'Create a new user account',
   })
-  async registerAccount(@Body() body: CreateAccountBody): Promise<AccountDto> {
-    return await this.accountsService.registerAccount(body);
+  async createAccount(
+    @Body() { email, password, emailVerified, role }: CreateAccountBody,
+  ): Promise<CoreApiResponse<AccountDto>> {
+    const { data } = await this.accountsService.createAccount({
+      email,
+      password,
+      emailVerified,
+      role,
+    });
+    return CoreApiResponse.success(data, 'Account created successfully');
   }
 
   @Get('emails/:email')
@@ -64,9 +74,10 @@ export class AccountsController {
     summary: 'Get an user account by account email',
   })
   async getAccountByEmail(
-    @Param() param: GetAccountByEmailParam,
-  ): Promise<AccountDto> {
-    return await this.accountsService.getAccountByEmail(param.email);
+    @Param() { email }: GetAccountByEmailParam,
+  ): Promise<CoreApiResponse<AccountDto>> {
+    const { data } = await this.accountsService.getAccountByEmail(email);
+    return CoreApiResponse.success(data, 'Account retrieved successfully');
   }
 
   @Get(':id')
@@ -80,9 +91,10 @@ export class AccountsController {
     summary: 'Get an user account by account id',
   })
   async getAccountById(
-    @Param() param: GetAccountByIdParam,
-  ): Promise<AccountDto> {
-    return await this.accountsService.getAccountById(param.id);
+    @Param() { id }: GetAccountByIdParam,
+  ): Promise<CoreApiResponse<AccountDto>> {
+    const { data } = await this.accountsService.getAccountById(id);
+    return CoreApiResponse.success(data, 'Account retrieved successfully');
   }
 
   @Put('update/:id')
@@ -96,10 +108,15 @@ export class AccountsController {
     summary: 'Update an user account by account id',
   })
   async updateAccountById(
-    @Param() param: UpdateAccountByIdParam,
-    @Body() body: UpdateAccountBody,
-  ): Promise<AccountDto> {
-    return await this.accountsService.updateAccountById(param.id, body);
+    @Param() { id }: UpdateAccountByIdParam,
+    @Body() { email, emailVerified, password }: UpdateAccountBody,
+  ): Promise<CoreApiResponse<AccountDto>> {
+    const { data } = await this.accountsService.updateAccountById(id, {
+      email,
+      emailVerified,
+      password,
+    });
+    return CoreApiResponse.success(data, 'Account updated successfully');
   }
 
   @Delete('delete/:id')
@@ -111,8 +128,10 @@ export class AccountsController {
     operationId: 'deleteAccountById',
     summary: 'Delete an user account by account id',
   })
-  async deleteAccountById(@Param() param: DeleteAccountByIdParam) {
-    await this.accountsService.deleteAccountById(param.id);
-    return { status: 200, message: 'Account deleted successfully' };
+  async deleteAccountById(
+    @Param() { id }: DeleteAccountByIdParam,
+  ): Promise<CoreApiResponse<null>> {
+    await this.accountsService.deleteAccountById(id);
+    return CoreApiResponse.success(null, 'Account deleted successfully');
   }
 }

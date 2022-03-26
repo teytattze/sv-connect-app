@@ -4,26 +4,58 @@ import {
   HttpException,
   ExceptionFilter,
 } from '@nestjs/common';
-import { IResponseError, ServiceError } from '@sv-connect/domain';
+import {
+  CoreApiException,
+  CoreApiResponse,
+  GeneralCode,
+} from '@sv-connect/domain';
 
-@Catch(HttpException)
+@Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(ex: HttpException, host: ArgumentsHost) {
+  catch(ex: CoreApiException | HttpException | Error, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse();
-    const error = this.handleException(ex);
-    response.status(error.statusCode).send(error);
+    const apiResponseError = this.handleException(ex);
+    response.status(apiResponseError.statusCode).send(apiResponseError);
   }
 
-  handleException(error: any): IResponseError {
-    if (!error) return ServiceError.UNKNOWN;
-    if (error instanceof HttpException) {
-      return {
-        message: error.getResponse()['message'] || ServiceError.UNKNOWN.message,
-        errorCode:
-          error.getResponse()['errorCode'] || ServiceError.UNKNOWN.errorCode,
-        statusCode: error.getStatus() || ServiceError.UNKNOWN.statusCode,
-      };
+  private handleException(
+    ex: HttpException | CoreApiException | Error,
+  ): CoreApiResponse {
+    if (ex instanceof HttpException) {
+      const resultStatusCode =
+        ex.getStatus() || GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
+      const resultMessage =
+        ex.message || GeneralCode.INTERNAL_SERVER_ERROR.message;
+      const resultErrorCode =
+        ex.getResponse()['errorCode'] ||
+        GeneralCode.INTERNAL_SERVER_ERROR.errorCode;
+      const resultData = null;
+
+      return CoreApiResponse.error(
+        resultStatusCode,
+        resultMessage,
+        resultErrorCode,
+        resultData,
+      );
+    } else if (ex instanceof CoreApiException) {
+      const resultStatusCode =
+        ex.statusCode || GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
+      const resultMessage =
+        ex.message || GeneralCode.INTERNAL_SERVER_ERROR.message;
+      const resultErrorCode =
+        ex.errorCode || GeneralCode.INTERNAL_SERVER_ERROR.errorCode;
+      const resultData = ex.data || null;
+
+      return CoreApiResponse.error(
+        resultStatusCode,
+        resultMessage,
+        resultErrorCode,
+        resultData,
+      );
     }
-    return { ...ServiceError.UNKNOWN, message: error.message };
+    const resultStatusCode = GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
+    const resultMessage =
+      ex.message || GeneralCode.INTERNAL_SERVER_ERROR.message;
+    return CoreApiResponse.error(resultStatusCode, resultMessage);
   }
 }

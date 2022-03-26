@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IAccount, AccountRole } from '@sv-connect/domain';
+import { AccountRole } from '@prisma/client';
+import { IAccount } from '@sv-connect/domain';
 import httpContext from 'express-http-context';
 
 export const ROLES_KEY = 'roles';
