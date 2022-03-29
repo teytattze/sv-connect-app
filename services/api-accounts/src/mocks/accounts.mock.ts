@@ -113,3 +113,8 @@ export const mockAccountsRepository = {
   updateAccount: jest.fn(),
   deleteAccount: jest.fn(),
 };
+
+export const mockAdminAccountsRepository = {
+  findAccounts: jest.fn(),
+  findAccount: jest.fn(),
+};

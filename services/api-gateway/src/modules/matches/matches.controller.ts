@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   CoreApiResponse,
   MatchDto,
+  MatchSelectedStudentsAndSupervisorsBody,
   MatchSelectedStudentsBody,
   MatchSingleStudentBody,
 } from '@sv-connect/domain';
@@ -30,6 +31,19 @@ export class MatchesController {
     const { data } = await this.matchesService.matchSelectedStudents({
       studentIds,
     });
+    return CoreApiResponse.success(data);
+  }
+
+  @Post('selected/students/selected/supervisors')
+  async matchSelectedStudentsAndSupervisors(
+    @Body()
+    { studentIds, supervisorIds }: MatchSelectedStudentsAndSupervisorsBody,
+  ): Promise<CoreApiResponse<MatchDto[]>> {
+    const { data } =
+      await this.matchesService.matchSelectedStudentsAndSupervisors({
+        studentIds,
+        supervisorIds,
+      });
     return CoreApiResponse.success(data);
   }
 }

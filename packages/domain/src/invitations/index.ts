@@ -1,3 +1,5 @@
+export { InvitationStatus } from '@prisma/client';
+
 export { CreateInvitationBody } from './dtos/create-invitation.dto';
 export { InvitationDto } from './dtos/invitation.dto';
 export {

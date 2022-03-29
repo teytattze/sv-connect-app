@@ -498,6 +498,30 @@
         ]
       }
     },
+    "/api/matches/selected/students/selected/supervisors": {
+      "post": {
+        "operationId": "matchSelectedStudentsAndSupervisors",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchSelectedStudentsAndSupervisorsBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Matches"
+        ]
+      }
+    },
     "/api/profiles/create": {
       "post": {
         "operationId": "registerProfile",
@@ -1141,6 +1165,27 @@
         },
         "required": [
           "studentIds"
+        ]
+      },
+      "MatchSelectedStudentsAndSupervisorsBody": {
+        "type": "object",
+        "properties": {
+          "studentIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supervisorIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "studentIds",
+          "supervisorIds"
         ]
       },
       "ConnectAccountBody": {

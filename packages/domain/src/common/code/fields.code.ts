@@ -15,4 +15,10 @@ export class FieldsCode {
     errorCode: `${ERROR_PREFIX}001`,
     message: 'This field is already existed',
   };
+
+  public static FIELD_TITLE_EXISTS: ICode = {
+    statusCode: HttpStatus.BAD_REQUEST,
+    errorCode: `${ERROR_PREFIX}002`,
+    message: 'This field title is already existed',
+  };
 }

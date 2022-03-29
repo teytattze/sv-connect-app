@@ -1,3 +1,5 @@
+export { AccountRole } from '@prisma/client';
+
 export { AccountDto } from './dtos/account.dto';
 export {
   GetAccountByEmailParam,

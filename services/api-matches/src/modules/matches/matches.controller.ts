@@ -20,22 +20,32 @@ export class MatchesController implements IMatchesClient {
   async matchSingleStudent(
     @Payload('data') { studentId }: IMatchSingleStudentPayload,
   ): Promise<ICoreApiResponse<IMatch>> {
-    const matchResult = await this.matchesService.matchSingleStudent(studentId);
+    const matchResult = await this.matchesService.matchSingleStudent({
+      studentId,
+    });
     return CoreApiResponse.success(matchResult);
   }
 
   @MessagePattern(MatchPattern.MATCH_SELECTED_STUDENTS)
   async matchSelectedStudents(
-    @Payload('data') payload: IMatchSelectedStudentsPayload,
+    @Payload('data') { studentIds }: IMatchSelectedStudentsPayload,
   ): Promise<ICoreApiResponse<IMatch[]>> {
-    const matchResult = await this.matchesService.matchSelectedStudent(payload);
+    const matchResult = await this.matchesService.matchSelectedStudents({
+      studentIds,
+    });
     return CoreApiResponse.success(matchResult);
   }
 
   @MessagePattern(MatchPattern.MATCH_SELECTED_STUDENTS_AND_SUPERVISORS)
   async matchSelectedStudentsAndSupervisors(
-    @Payload('data') payload: IMatchSelectedStudentsAndSupervisorsPayload,
+    @Payload('data')
+    { studentIds, supervisorIds }: IMatchSelectedStudentsAndSupervisorsPayload,
   ): Promise<ICoreApiResponse<IMatch[]>> {
-    return;
+    const matchResult =
+      await this.matchesService.matchSelectedStudentsAndSupervisors({
+        studentIds,
+        supervisorIds,
+      });
+    return CoreApiResponse.success(matchResult);
   }
 }

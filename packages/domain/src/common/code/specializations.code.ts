@@ -15,4 +15,10 @@ export class SpecializationsCode {
     errorCode: `${ERROR_PREFIX}001`,
     message: 'This specialization is already existed',
   };
+
+  public static SPECIALIZATION_TITLE_EXISTS: ICode = {
+    statusCode: HttpStatus.BAD_REQUEST,
+    errorCode: `${ERROR_PREFIX}002`,
+    message: 'This specialization title is already existed',
+  };
 }

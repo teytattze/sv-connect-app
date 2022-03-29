@@ -33,6 +33,9 @@ export class FieldsService implements IFieldsService {
   }
 
   async createField(payload: ICreateFieldPayload): Promise<IField> {
+    const isExisted = await this.isFieldExistsByTitle(payload.title);
+    if (isExisted) throw new RpcException(FieldsCode.FIELD_TITLE_EXISTS);
+
     const [error, field] = await to<IField, any>(
       this.fieldsRepository.createField(payload),
     );
@@ -56,5 +59,12 @@ export class FieldsService implements IFieldsService {
       this.fieldsRepository.deleteField({ id }),
     );
     if (error) handlePrismaError(error);
+  }
+
+  async isFieldExistsByTitle(title: string): Promise<boolean> {
+    const [error, account] = await to(
+      this.fieldsRepository.findField({ title }),
+    );
+    return error || !account ? false : true;
   }
 }

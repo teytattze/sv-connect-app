@@ -6,7 +6,7 @@ import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import SummarizeRoundedIcon from '@mui/icons-material/SummarizeRounded';
 import SupervisorAccountRoundedIcon from '@mui/icons-material/SupervisorAccountRounded';
-import { AccountRole } from '@sv-connect/domain/accounts';
+import { AccountRole } from '@sv-connect/domain';
 
 export interface IRoute {
   group: string;

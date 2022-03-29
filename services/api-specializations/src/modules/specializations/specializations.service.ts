@@ -38,6 +38,10 @@ export class SpecializationsService implements ISpecializationsService {
   async createSpecialization(
     payload: ICreateSpecializationPayload,
   ): Promise<ISpecialization> {
+    const isExisted = await this.isSpecializationExistsByTitle(payload.title);
+    if (isExisted)
+      throw new RpcException(SpecializationsCode.SPECIALIZATION_TITLE_EXISTS);
+
     const [error, specialization] = await to<ISpecialization, any>(
       this.specializationsRepository.createSpecialization(payload),
     );
@@ -61,5 +65,12 @@ export class SpecializationsService implements ISpecializationsService {
       this.specializationsRepository.deleteSpecialization({ id }),
     );
     if (error) handlePrismaError(error);
+  }
+
+  async isSpecializationExistsByTitle(title: string): Promise<boolean> {
+    const [error, account] = await to(
+      this.specializationsRepository.findSpecialization({ title }),
+    );
+    return error || !account ? false : true;
   }
 }

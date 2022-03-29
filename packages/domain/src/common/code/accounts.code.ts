@@ -10,9 +10,15 @@ export class AccountsCode {
     message: 'Account not found',
   };
 
-  public static ACCOUNT_EMAIL_EXISTS: ICode = {
+  public static ACCOUNT_EXISTS: ICode = {
     statusCode: HttpStatus.BAD_REQUEST,
     errorCode: `${ERROR_PREFIX}001`,
-    message: 'This email is already existed',
+    message: 'This account is already existed',
+  };
+
+  public static ACCOUNT_EMAIL_EXISTS: ICode = {
+    statusCode: HttpStatus.BAD_REQUEST,
+    errorCode: `${ERROR_PREFIX}002`,
+    message: 'This account email is already existed',
   };
 }

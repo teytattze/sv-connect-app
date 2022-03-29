@@ -6,6 +6,7 @@ import {
   ICoreApiResponse,
   IMatch,
   IMatchesClient,
+  IMatchSelectedStudentsAndSupervisorsPayload,
   IMatchSelectedStudentsPayload,
   IMatchSingleStudentPayload,
 } from '@sv-connect/domain';
@@ -16,31 +17,56 @@ import { firstValueFrom } from 'rxjs';
 export class MatchesService implements IMatchesClient {
   constructor(@Inject(MATCH_CLIENT) private readonly client: ClientProxy) {}
 
-  async matchSingleStudent(
-    payload: IMatchSingleStudentPayload,
-  ): Promise<ICoreApiResponse<IMatch>> {
+  async matchSingleStudent({
+    studentId,
+  }: IMatchSingleStudentPayload): Promise<ICoreApiResponse<IMatch>> {
     const [error, response] = await to<
       ICoreApiResponse<IMatch>,
       ICoreApiResponse<null>
     >(
       firstValueFrom(
-        this.client.send(MatchPattern.MATCH_SINGLE_STUDENT, { data: payload }),
+        this.client.send(MatchPattern.MATCH_SINGLE_STUDENT, {
+          data: { studentId },
+        }),
       ),
     );
     if (error) throw CoreApiException.new(error);
     return response;
   }
 
-  async matchSelectedStudents(
-    payload: IMatchSelectedStudentsPayload,
-  ): Promise<ICoreApiResponse<IMatch[]>> {
+  async matchSelectedStudents({
+    studentIds,
+  }: IMatchSelectedStudentsPayload): Promise<ICoreApiResponse<IMatch[]>> {
     const [error, response] = await to<
       ICoreApiResponse<IMatch[]>,
       ICoreApiResponse<null>
     >(
       firstValueFrom(
         this.client.send(MatchPattern.MATCH_SELECTED_STUDENTS, {
-          data: payload,
+          data: { studentIds },
+        }),
+      ),
+    );
+    if (error) throw CoreApiException.new(error);
+    return response;
+  }
+
+  async matchSelectedStudentsAndSupervisors({
+    studentIds,
+    supervisorIds,
+  }: IMatchSelectedStudentsAndSupervisorsPayload): Promise<
+    ICoreApiResponse<IMatch[]>
+  > {
+    const [error, response] = await to<
+      ICoreApiResponse<IMatch[]>,
+      ICoreApiResponse<null>
+    >(
+      firstValueFrom(
+        this.client.send(MatchPattern.MATCH_SELECTED_STUDENTS_AND_SUPERVISORS, {
+          data: {
+            studentIds,
+            supervisorIds,
+          },
         }),
       ),
     );
