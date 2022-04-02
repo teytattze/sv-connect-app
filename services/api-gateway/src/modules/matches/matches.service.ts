@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { MatchPattern, MATCH_CLIENT } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   IMatch,
   IMatchesClient,
   IMatchSelectedStudentsAndSupervisorsPayload,
@@ -19,10 +19,10 @@ export class MatchesService implements IMatchesClient {
 
   async matchSingleStudent({
     studentId,
-  }: IMatchSingleStudentPayload): Promise<ICoreApiResponse<IMatch>> {
+  }: IMatchSingleStudentPayload): Promise<ICoreServiceResponse<IMatch>> {
     const [error, response] = await to<
-      ICoreApiResponse<IMatch>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IMatch>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(MatchPattern.MATCH_SINGLE_STUDENT, {
@@ -30,16 +30,16 @@ export class MatchesService implements IMatchesClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async matchSelectedStudents({
     studentIds,
-  }: IMatchSelectedStudentsPayload): Promise<ICoreApiResponse<IMatch[]>> {
+  }: IMatchSelectedStudentsPayload): Promise<ICoreServiceResponse<IMatch[]>> {
     const [error, response] = await to<
-      ICoreApiResponse<IMatch[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IMatch[]>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(MatchPattern.MATCH_SELECTED_STUDENTS, {
@@ -47,7 +47,7 @@ export class MatchesService implements IMatchesClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
@@ -55,11 +55,11 @@ export class MatchesService implements IMatchesClient {
     studentIds,
     supervisorIds,
   }: IMatchSelectedStudentsAndSupervisorsPayload): Promise<
-    ICoreApiResponse<IMatch[]>
+    ICoreServiceResponse<IMatch[]>
   > {
     const [error, response] = await to<
-      ICoreApiResponse<IMatch[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IMatch[]>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(MatchPattern.MATCH_SELECTED_STUDENTS_AND_SUPERVISORS, {
@@ -70,7 +70,7 @@ export class MatchesService implements IMatchesClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

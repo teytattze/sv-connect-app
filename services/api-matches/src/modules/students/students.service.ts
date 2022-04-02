@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { StudentsPattern, STUDENTS_CLIENT } from '@sv-connect/common';
 import {
-  ICoreApiResponse,
+  CoreRpcException,
+  ICoreServiceResponse,
   IStudent,
   IStudentsClient,
 } from '@sv-connect/domain';
@@ -13,16 +14,16 @@ import { firstValueFrom } from 'rxjs';
 export class StudentsService implements IStudentsClient {
   constructor(@Inject(STUDENTS_CLIENT) private readonly client: ClientProxy) {}
 
-  async getStudentById(id: string): Promise<ICoreApiResponse<IStudent>> {
+  async getStudentById(id: string): Promise<ICoreServiceResponse<IStudent>> {
     const [error, response] = await to<
-      ICoreApiResponse<IStudent>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IStudent>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(StudentsPattern.GET_STUDENT_BY_ID, { id }),
       ),
     );
-    if (error) throw new RpcException(error);
+    if (error) throw CoreRpcException.fromService(error);
     return response;
   }
 }

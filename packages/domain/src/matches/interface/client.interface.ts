@@ -1,4 +1,4 @@
-import { ICoreApiResponse } from '../../common/api';
+import { ICoreServiceResponse } from '../../common';
 import {
   IMatchSelectedStudentsAndSupervisorsPayload,
   IMatchSelectedStudentsPayload,
@@ -9,11 +9,11 @@ import { IMatch } from './match.interface';
 export interface IMatchesClient {
   matchSingleStudent?(
     payload: IMatchSingleStudentPayload,
-  ): Promise<ICoreApiResponse<IMatch>>;
+  ): Promise<ICoreServiceResponse<IMatch>>;
   matchSelectedStudents?(
     payload: IMatchSelectedStudentsPayload,
-  ): Promise<ICoreApiResponse<IMatch[]>>;
+  ): Promise<ICoreServiceResponse<IMatch[]>>;
   matchSelectedStudentsAndSupervisors?(
     payload: IMatchSelectedStudentsAndSupervisorsPayload,
-  ): Promise<ICoreApiResponse<IMatch[]>>;
+  ): Promise<ICoreServiceResponse<IMatch[]>>;
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
-  CoreApiResponse,
+  CoreHttpResponse,
   CreateStudentBody,
   StudentDto,
 } from '@sv-connect/domain';
@@ -15,8 +15,8 @@ export class StudentsController {
   @Post('create')
   async createStudent(
     @Body() body: CreateStudentBody,
-  ): Promise<CoreApiResponse<StudentDto>> {
+  ): Promise<CoreHttpResponse<StudentDto>> {
     const { data } = await this.studentsService.createStudent(body);
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 }

@@ -15,10 +15,9 @@ import {
 } from '@sv-connect/common';
 import config from 'config';
 import { AccountsModule } from './modules/accounts/accounts.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { FieldsModule } from './modules/fields/fields.module';
 import { InvitationsModule } from './modules/invitations/invitations.module';
-import { JwtModule } from './modules/jwt/jwt.module';
 import { ProfilesModule } from './modules/profiles/profiles.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { SpecializationsModule } from './modules/specializations/specializations.module';
@@ -73,12 +72,11 @@ const clientsProviderOptions: IClientsProviderOptions[] = [
 @Module({
   imports: [
     AccountsModule,
-    AuthModule,
+    AuthenticationModule,
     ClientsProvider.register(clientsProviderOptions),
     FieldsModule,
     InvitationsModule,
     MatchesModule,
-    JwtModule,
     ProfilesModule,
     ProjectsModule,
     SpecializationsModule,

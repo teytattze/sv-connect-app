@@ -6,4 +6,5 @@ export {
   Sidebar,
   SidebarSection,
   SidebarSectionButton,
+  SidebarType,
 } from '../components/sidebar';

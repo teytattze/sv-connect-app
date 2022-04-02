@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { PROFILES_CLIENT, ProfilesPattern } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   ICreateProfilePayload,
   IProfile,
   IProfilesClient,
@@ -16,25 +16,25 @@ import { firstValueFrom } from 'rxjs';
 export class ProfilesService implements IProfilesClient {
   constructor(@Inject(PROFILES_CLIENT) private readonly client: ClientProxy) {}
 
-  async getProfileById(id: string): Promise<ICoreApiResponse<IProfile>> {
+  async getProfileById(id: string): Promise<ICoreServiceResponse<IProfile>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProfile>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProfile>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProfilesPattern.GET_PROFILE_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async getProfileByAccountId(
     accountId: string,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<ICoreServiceResponse<IProfile>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProfile>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProfile>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProfilesPattern.GET_PROFILE_BY_ACCOUNT_ID, {
@@ -42,32 +42,32 @@ export class ProfilesService implements IProfilesClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async createProfile(
     payload: ICreateProfilePayload,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<ICoreServiceResponse<IProfile>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProfile>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProfile>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProfilesPattern.CREATE_PROFILE, { data: payload }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async updateProfileByAccountId(
     accountId: string,
     payload: IUpdateProfilePayload,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<ICoreServiceResponse<IProfile>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProfile>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProfile>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProfilesPattern.UPDATE_PROFILE_BY_ACCOUNT_ID, {
@@ -76,7 +76,7 @@ export class ProfilesService implements IProfilesClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

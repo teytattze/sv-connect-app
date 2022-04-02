@@ -1,6 +1,5 @@
-import * as React from 'react';
-import { Navbar } from './exposes';
+import React from 'react';
 
 export function App() {
-  return <Navbar title="Hello" />;
+  return null;
 }

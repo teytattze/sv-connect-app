@@ -2,10 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ACCOUNTS_CLIENT, AccountsPattern } from '@sv-connect/common';
 import {
-  CoreApiException,
+  CoreHttpException,
   IAccount,
   IAccountsClient,
-  ICoreApiResponse,
+  ICoreServiceResponse,
   ICreateAccountPayload,
   IUpdateAccountPayload,
 } from '@sv-connect/domain';
@@ -18,76 +18,78 @@ export class AccountsService implements IAccountsClient {
 
   async adminGetAccountByEmail(
     email: string,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<ICoreServiceResponse<IAccount>> {
     const [error, account] = await to<
-      ICoreApiResponse<IAccount>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.ADMIN_GET_ACCOUNT_BY_EMAIL, { email }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return account;
   }
 
-  async indexAccounts(): Promise<ICoreApiResponse<IAccount[]>> {
+  async indexAccounts(): Promise<ICoreServiceResponse<IAccount[]>> {
     const [error, accounts] = await to<
-      ICoreApiResponse<IAccount[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount[]>,
+      ICoreServiceResponse<null>
     >(firstValueFrom(this.client.send(AccountsPattern.INDEX_ACCOUNTS, {})));
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return accounts;
   }
 
-  async getAccountById(id: string): Promise<ICoreApiResponse<IAccount>> {
+  async getAccountById(id: string): Promise<ICoreServiceResponse<IAccount>> {
     const [error, account] = await to<
-      ICoreApiResponse<IAccount>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.GET_ACCOUNT_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return account;
   }
 
-  async getAccountByEmail(email: string): Promise<ICoreApiResponse<IAccount>> {
+  async getAccountByEmail(
+    email: string,
+  ): Promise<ICoreServiceResponse<IAccount>> {
     const [error, account] = await to<
-      ICoreApiResponse<IAccount>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.GET_ACCOUNT_BY_EMAIL, { email }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return account;
   }
 
   async createAccount(
     payload: ICreateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<ICoreServiceResponse<IAccount>> {
     const [error, account] = await to<
-      ICoreApiResponse<IAccount>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.CREATE_ACCOUNT, { data: payload }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return account;
   }
 
   async updateAccountById(
     id: string,
     payload: IUpdateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<ICoreServiceResponse<IAccount>> {
     const [error, account] = await to<
-      ICoreApiResponse<IAccount>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.UPDATE_ACCOUNT_BY_ID, {
@@ -96,20 +98,20 @@ export class AccountsService implements IAccountsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return account;
   }
 
-  async deleteAccountById(id: string): Promise<ICoreApiResponse<null>> {
+  async deleteAccountById(id: string): Promise<ICoreServiceResponse<null>> {
     const [error, result] = await to<
-      ICoreApiResponse<null>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<null>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.DELETE_ACCOUNT_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return result;
   }
 }

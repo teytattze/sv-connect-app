@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { AccountsPattern, ACCOUNTS_CLIENT } from '@sv-connect/common';
 import {
+  CoreRpcException,
   IAccount,
   IAccountsClient,
-  ICoreApiResponse,
+  ICoreServiceResponse,
   IUpdateAccountPayload,
 } from '@sv-connect/domain';
 import to from 'await-to-js';
@@ -17,10 +18,10 @@ export class AccountsService implements IAccountsClient {
   async updateAccountById(
     accountId: string,
     payload: IUpdateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<ICoreServiceResponse<IAccount>> {
     const [error, response] = await to<
-      ICoreApiResponse<IAccount>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IAccount>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(AccountsPattern.UPDATE_ACCOUNT_BY_ID, {
@@ -29,7 +30,7 @@ export class AccountsService implements IAccountsClient {
         }),
       ),
     );
-    if (error) throw new RpcException(error);
+    if (error) throw CoreRpcException.fromService(error);
     return response;
   }
 }

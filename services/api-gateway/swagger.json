@@ -217,52 +217,6 @@
         ]
       }
     },
-    "/api/auth/login": {
-      "post": {
-        "operationId": "login",
-        "summary": "Login by account email and password",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginBody"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Authorized"
-          }
-        }
-      }
-    },
-    "/api/auth/logout": {
-      "post": {
-        "operationId": "logout",
-        "summary": "Logout and clear cookies",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Logged Out"
-          }
-        }
-      }
-    },
-    "/api/auth/access/refresh": {
-      "post": {
-        "operationId": "refreshAccess",
-        "summary": "Refresh account access token with refresh token",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Authorizations Refreshed"
-          }
-        }
-      }
-    },
     "/api/fields": {
       "get": {
         "operationId": "indexFields",
@@ -1011,21 +965,6 @@
             "type": "string"
           }
         }
-      },
-      "LoginBody": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "email",
-          "password"
-        ]
       },
       "ConnectSpecializationBody": {
         "type": "object",

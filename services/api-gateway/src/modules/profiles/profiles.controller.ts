@@ -7,7 +7,7 @@ import {
   UpdateProfileByAccountIdParam,
   UpdateProfileBody,
   ProfileDto,
-  CoreApiResponse,
+  CoreHttpResponse,
 } from '@sv-connect/domain';
 import { ProfilesService } from './profiles.service';
 
@@ -28,27 +28,27 @@ export class ProfilesController {
   })
   async createProfile(
     @Body() body: CreateProfileBody,
-  ): Promise<CoreApiResponse<ProfileDto>> {
+  ): Promise<CoreHttpResponse<ProfileDto>> {
     const { data } = await this.profilesService.createProfile(body);
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Get(':id')
   async getProfileById(
     @Param() { id }: GetProfileByIdParam,
-  ): Promise<CoreApiResponse<ProfileDto>> {
+  ): Promise<CoreHttpResponse<ProfileDto>> {
     const { data } = await this.profilesService.getProfileById(id);
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Get('accounts/:accountId')
   async getProfileByAccountId(
     @Param() { accountId }: GetProfileByAccountIdParam,
-  ): Promise<CoreApiResponse<ProfileDto>> {
+  ): Promise<CoreHttpResponse<ProfileDto>> {
     const { data } = await this.profilesService.getProfileByAccountId(
       accountId,
     );
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Put('update/accounts/:accountId')
@@ -64,11 +64,11 @@ export class ProfilesController {
   async updateProfileByAccountId(
     @Param() { accountId }: UpdateProfileByAccountIdParam,
     @Body() body: UpdateProfileBody,
-  ): Promise<CoreApiResponse<ProfileDto>> {
+  ): Promise<CoreHttpResponse<ProfileDto>> {
     const { data } = await this.profilesService.updateProfileByAccountId(
       accountId,
       body,
     );
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 }

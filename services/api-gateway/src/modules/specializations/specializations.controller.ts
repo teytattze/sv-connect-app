@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
-  CoreApiResponse,
+  CoreHttpResponse,
   CreateSpecializationBody,
   DeleteSpecializationByIdParam,
   GetSpecializationByIdParam,
@@ -27,56 +27,65 @@ export class SpecializationsController {
   ) {}
 
   @Get()
-  async indexSpecializations(): Promise<CoreApiResponse<SpecializationDto[]>> {
+  async indexSpecializations(): Promise<CoreHttpResponse<SpecializationDto[]>> {
     const { data } = await this.specializationsService.indexSpecializations();
-    return CoreApiResponse.success(
+    return CoreHttpResponse.success({
       data,
-      'Specializations retrieved successfully',
-    );
+      message: 'Specializations retrieved successfully',
+    });
   }
 
   @Post('create')
   async createSpecialization(
     @Body() body: CreateSpecializationBody,
-  ): Promise<CoreApiResponse<SpecializationDto>> {
+  ): Promise<CoreHttpResponse<SpecializationDto>> {
     const { data } = await this.specializationsService.createSpecialization(
       body,
     );
-    return CoreApiResponse.success(data, 'Specialization created successfully');
+    return CoreHttpResponse.success({
+      data,
+      message: 'Specialization created successfully',
+    });
   }
 
   @Get(':id')
   async getSpecializationById(
     @Param() { id }: GetSpecializationByIdParam,
-  ): Promise<CoreApiResponse<SpecializationDto>> {
+  ): Promise<CoreHttpResponse<SpecializationDto>> {
     const { data } = await this.specializationsService.getSpecializationById(
       id,
     );
-    return CoreApiResponse.success(
+    return CoreHttpResponse.success({
       data,
-      'Specialization retrieved successfully',
-    );
+      message: 'Specialization retrieved successfully',
+    });
   }
 
   @Put('update/:id')
   async updateSpecializationById(
     @Param() { id }: UpdateSpecializationByIdParam,
     @Body() body: UpdateSpecializationBody,
-  ): Promise<CoreApiResponse<SpecializationDto>> {
+  ): Promise<CoreHttpResponse<SpecializationDto>> {
     const { data } = await this.specializationsService.updateSpecializationById(
       id,
       body,
     );
-    return CoreApiResponse.success(data, 'Specialization updated successfully');
+    return CoreHttpResponse.success({
+      data,
+      message: 'Specialization updated successfully',
+    });
   }
 
   @Delete('delete/:id')
   async deleteSpecializationById(
     @Param() { id }: DeleteSpecializationByIdParam,
-  ): Promise<CoreApiResponse<null>> {
+  ): Promise<CoreHttpResponse<null>> {
     const { data } = await this.specializationsService.deleteSpecializationById(
       id,
     );
-    return CoreApiResponse.success(data, 'Specialization deleted successfully');
+    return CoreHttpResponse.success({
+      data,
+      message: 'Specialization deleted successfully',
+    });
   }
 }

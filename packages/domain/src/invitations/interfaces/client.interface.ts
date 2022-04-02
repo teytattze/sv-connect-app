@@ -1,11 +1,11 @@
-import { ICoreApiResponse } from '../../common/api';
+import { ICoreServiceResponse } from '../../common';
 import { ICreateInvitationPayload } from '../payloads/create-invitation.payload';
 import { IInvitation } from './invitation.interface';
 
 export interface IInvitationsClient {
   createInvitation?(
     payload: ICreateInvitationPayload,
-  ): Promise<ICoreApiResponse<IInvitation>>;
-  acceptInvitationById?(id: string): Promise<ICoreApiResponse<IInvitation>>;
-  rejectInvitationById?(id: string): Promise<ICoreApiResponse<IInvitation>>;
+  ): Promise<ICoreServiceResponse<IInvitation>>;
+  acceptInvitationById?(id: string): Promise<ICoreServiceResponse<IInvitation>>;
+  rejectInvitationById?(id: string): Promise<ICoreServiceResponse<IInvitation>>;
 }

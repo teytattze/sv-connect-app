@@ -1,12 +1,8 @@
 import { ILoginPayload } from '../payloads/login.payload';
-import { IRefreshAccessPayload } from '../payloads/refresh-access.payload';
-import { IAuthTokens } from './auth-tokens.interface';
-import { ICoreApiResponse } from '../../common/api';
+import { IAuthToken } from './auth-tokens.interface';
+import { ICoreServiceResponse } from '../../common';
 
 export interface IAuthClient {
-  login?(payload: ILoginPayload): Promise<ICoreApiResponse<IAuthTokens>>;
-  logout?(accountId: string): Promise<ICoreApiResponse<null>>;
-  refreshAccess?(
-    payload: IRefreshAccessPayload,
-  ): Promise<ICoreApiResponse<IAuthTokens>>;
+  login?(payload: ILoginPayload): Promise<ICoreServiceResponse<IAuthToken>>;
+  logout?(accountId: string): Promise<ICoreServiceResponse<null>>;
 }

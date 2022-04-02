@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import {
   AccountsCode,
+  CoreRpcException,
   IAccount,
   IAccountsService,
   ICreateAccountPayload,
@@ -9,16 +10,12 @@ import {
 } from '@sv-connect/domain';
 import * as bcrypt from 'bcryptjs';
 import { AccountsRepository } from './accounts.repository';
-import { SessionsService } from '../sessions/sessions.service';
 import to from 'await-to-js';
 import { handlePrismaError } from './accounts.helper';
 
 @Injectable()
 export class AccountsService implements IAccountsService {
-  constructor(
-    private readonly accountsRepository: AccountsRepository,
-    private readonly sessionsService: SessionsService,
-  ) {}
+  constructor(private readonly accountsRepository: AccountsRepository) {}
 
   async indexAccounts(): Promise<IAccount[]> {
     const [error, accounts] = await to(this.accountsRepository.findAccounts());
@@ -28,7 +25,7 @@ export class AccountsService implements IAccountsService {
 
   async getAccountById(id: string): Promise<IAccount> {
     const [_, account] = await to(this.accountsRepository.findAccount({ id }));
-    if (!account) throw new RpcException(AccountsCode.ACCOUNT_NOT_FOUND);
+    if (!account) throw CoreRpcException.new(AccountsCode.ACCOUNT_NOT_FOUND);
     return account;
   }
 
@@ -36,13 +33,14 @@ export class AccountsService implements IAccountsService {
     const [_, account] = await to(
       this.accountsRepository.findAccount({ email }),
     );
-    if (!account) throw new RpcException(AccountsCode.ACCOUNT_NOT_FOUND);
+    if (!account) throw CoreRpcException.new(AccountsCode.ACCOUNT_NOT_FOUND);
     return account;
   }
 
   async createAccount(payload: ICreateAccountPayload): Promise<IAccount> {
     const isExisted = await this.isAccountExistsByEmail(payload.email);
-    if (isExisted) throw new RpcException(AccountsCode.ACCOUNT_EMAIL_EXISTS);
+    if (isExisted)
+      throw CoreRpcException.new(AccountsCode.ACCOUNT_EMAIL_EXISTS);
 
     const hashedPassword = await this.hashPassword(payload.password);
     const [error, newAccount] = await to<IAccount, any>(
@@ -53,9 +51,6 @@ export class AccountsService implements IAccountsService {
     );
 
     if (error) handlePrismaError(error);
-    await this.sessionsService.createSession({
-      account: { id: newAccount.id },
-    });
     return newAccount;
   }
 

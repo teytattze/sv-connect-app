@@ -1,4 +1,4 @@
-import { AccountRole } from '@sv-connect/domain/accounts';
+import { AccountRole } from '@sv-connect/domain';
 
 export interface IRoute {
   group: string;

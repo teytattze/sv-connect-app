@@ -2,8 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ProfilesPattern } from '@sv-connect/common';
 import {
-  CoreApiResponse,
-  ICoreApiResponse,
+  CoreServiceResponse,
   ICreateProfilePayload,
   IProfile,
   IProfilesClient,
@@ -18,36 +17,36 @@ export class ProfilesController implements IProfilesClient {
   @MessagePattern(ProfilesPattern.GET_PROFILE_BY_ID)
   async getProfileById(
     @Payload('id') id: string,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<CoreServiceResponse<IProfile>> {
     const profile = await this.profilesService.getProfileById(id);
-    return CoreApiResponse.success(profile);
+    return CoreServiceResponse.success({ data: profile });
   }
 
   @MessagePattern(ProfilesPattern.GET_PROFILE_BY_ACCOUNT_ID)
   async getProfileByAccountId(
     @Payload('accountId') accountId: string,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<CoreServiceResponse<IProfile>> {
     const profile = await this.profilesService.getProfileByAccountId(accountId);
-    return CoreApiResponse.success(profile);
+    return CoreServiceResponse.success({ data: profile });
   }
 
   @MessagePattern(ProfilesPattern.CREATE_PROFILE)
   async createProfile(
     @Payload('data') payload: ICreateProfilePayload,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<CoreServiceResponse<IProfile>> {
     const profile = await this.profilesService.createProfile(payload);
-    return CoreApiResponse.success(profile);
+    return CoreServiceResponse.success({ data: profile });
   }
 
   @MessagePattern(ProfilesPattern.UPDATE_PROFILE_BY_ACCOUNT_ID)
   async updateProfileByAccountId(
     @Payload('accountId') accountId: string,
     @Payload('data') payload: IUpdateProfilePayload,
-  ): Promise<ICoreApiResponse<IProfile>> {
+  ): Promise<CoreServiceResponse<IProfile>> {
     const profile = await this.profilesService.updateProfileByAccountId(
       accountId,
       payload,
     );
-    return CoreApiResponse.success(profile);
+    return CoreServiceResponse.success({ data: profile });
   }
 }

@@ -1,9 +1,7 @@
 import { ILoginPayload } from '../payloads/login.payload';
-import { IRefreshAccessPayload } from '../payloads/refresh-access.payload';
-import { IAuthTokens } from './auth-tokens.interface';
+import { IAuthToken } from './auth-tokens.interface';
 
 export interface IAuthService {
-  login(payload: ILoginPayload): Promise<IAuthTokens>;
+  login(payload: ILoginPayload): Promise<IAuthToken>;
   logout(accountId: string): Promise<void>;
-  refreshAccess(payload: IRefreshAccessPayload): Promise<IAuthTokens>;
 }

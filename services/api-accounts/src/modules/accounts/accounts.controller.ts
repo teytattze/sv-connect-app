@@ -2,10 +2,9 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AccountsPattern } from '@sv-connect/common';
 import {
-  CoreApiResponse,
+  CoreServiceResponse,
   IAccount,
   IAccountsClient,
-  ICoreApiResponse,
   ICreateAccountPayload,
   IUpdateAccountPayload,
 } from '@sv-connect/domain';
@@ -16,49 +15,51 @@ export class AccountsController implements IAccountsClient {
   constructor(private readonly accountsService: AccountsService) {}
 
   @MessagePattern(AccountsPattern.INDEX_ACCOUNTS)
-  async indexAccounts(): Promise<ICoreApiResponse<IAccount[]>> {
+  async indexAccounts(): Promise<CoreServiceResponse<IAccount[]>> {
     const accounts = await this.accountsService.indexAccounts();
-    return CoreApiResponse.success(accounts);
+    return CoreServiceResponse.success({ data: accounts });
   }
 
   @MessagePattern(AccountsPattern.CREATE_ACCOUNT)
   async createAccount(
     @Payload('data') data: ICreateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<CoreServiceResponse<IAccount>> {
     const account = await this.accountsService.createAccount(data);
-    return CoreApiResponse.success(account);
+    return CoreServiceResponse.success({ data: account });
   }
 
   @MessagePattern(AccountsPattern.GET_ACCOUNT_BY_EMAIL)
   async getAccountByEmail(
     @Payload('email') email: string,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<CoreServiceResponse<IAccount>> {
     const account = await this.accountsService.getAccountByEmail(email);
-    return CoreApiResponse.success(account);
+    return CoreServiceResponse.success({ data: account });
   }
 
   @MessagePattern(AccountsPattern.GET_ACCOUNT_BY_ID)
   async getAccountById(
     @Payload('id') id: string,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<CoreServiceResponse<IAccount>> {
     const account = await this.accountsService.getAccountById(id);
-    return CoreApiResponse.success(account);
+    return CoreServiceResponse.success({ data: account });
   }
 
   @MessagePattern(AccountsPattern.UPDATE_ACCOUNT_BY_ID)
   async updateAccountById(
     @Payload('id') id: string,
     @Payload('data') payload: IUpdateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>> {
+  ): Promise<CoreServiceResponse<IAccount>> {
     const account = await this.accountsService.updateAccountById(id, payload);
-    return CoreApiResponse.success(account);
+    return CoreServiceResponse.success({ data: account });
   }
 
   @MessagePattern(AccountsPattern.DELETE_ACCOUNT_BY_ID)
   async deleteAccountById(
     @Payload('id') id: string,
-  ): Promise<ICoreApiResponse<null>> {
+  ): Promise<CoreServiceResponse<null>> {
     await this.accountsService.deleteAccountById(id);
-    return CoreApiResponse.success(null, 'Account deleted successfully');
+    return CoreServiceResponse.success({
+      message: 'Account deleted successfully',
+    });
   }
 }

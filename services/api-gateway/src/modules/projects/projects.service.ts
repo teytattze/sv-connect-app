@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { PROJECTS_CLIENT, ProjectsPattern } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   ICreateProjectPayload,
   IProject,
   IProjectsClient,
@@ -16,41 +16,41 @@ import { firstValueFrom } from 'rxjs';
 export class ProjectsService implements IProjectsClient {
   constructor(@Inject(PROJECTS_CLIENT) private readonly client: ClientProxy) {}
 
-  async getProjectById(id: string): Promise<ICoreApiResponse<IProject>> {
+  async getProjectById(id: string): Promise<ICoreServiceResponse<IProject>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProject>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProject>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProjectsPattern.GET_PROJECT_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async createProject(
     payload: ICreateProjectPayload,
-  ): Promise<ICoreApiResponse<IProject>> {
+  ): Promise<ICoreServiceResponse<IProject>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProject>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProject>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProjectsPattern.CREATE_PROJECT, { data: payload }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async updateProjectById(
     id: string,
     payload: IUpdateProjectPayload,
-  ): Promise<ICoreApiResponse<IProject>> {
+  ): Promise<ICoreServiceResponse<IProject>> {
     const [error, response] = await to<
-      ICoreApiResponse<IProject>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IProject>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(ProjectsPattern.UPDATE_PROJECT_BY_ID, {
@@ -59,7 +59,7 @@ export class ProjectsService implements IProjectsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

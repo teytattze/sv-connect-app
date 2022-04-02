@@ -1,25 +1,45 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
-import { MicroserviceOptions } from '@nestjs/microservices';
-import { ApiResponseInterceptor, RpcExceptionFilter } from '@sv-connect/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import {
+  HttpExceptionFilter,
+  HttpResponseInterceptor,
+} from '@sv-connect/common';
+import bodyParser from 'body-parser';
 import config from 'config';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import httpContext from 'express-http-context';
 import { AppModule } from './app.module';
 import 'dotenv/config';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    config.get('service.transporter'),
+  const app = await NestFactory.create(AppModule);
+
+  app.setGlobalPrefix('api');
+
+  app.use(bodyParser.json());
+  app.use(httpContext.middleware);
+  app.use(cookieParser());
+  app.use(helmet());
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new HttpResponseInterceptor());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
   );
 
-  app.useGlobalFilters(new RpcExceptionFilter());
-  app.useGlobalInterceptors(new ApiResponseInterceptor());
-
-  await app.listen();
+  await app.listen(config.get('server.port'));
 }
 bootstrap()
   .then(() => {
-    Logger.log(`${config.get('service.name')} is serving...`);
+    Logger.log(
+      `${config.get('service.name')} is serving on PORT ${config.get(
+        'server.port',
+      )}...`,
+    );
   })
   .catch((err) => {
     Logger.error(err);

@@ -1,5 +1,7 @@
 export { AccountRole } from '@prisma/client';
 
+export { ACCOUNT_COOKIE_NAME } from './constants/account.const';
+
 export { AccountDto } from './dtos/account.dto';
 export {
   GetAccountByEmailParam,

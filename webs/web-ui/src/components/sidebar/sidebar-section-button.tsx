@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { ListItemButton, ListItemText, Stack } from '@mui/material';
+import React from 'react';
+import { IconButton, ListItemButton, ListItemText, Stack } from '@mui/material';
 import { IPath } from '../../interfaces/routes.interface';
 
 export interface SidebarSectionButtonProps {
@@ -25,4 +25,10 @@ export function SidebarSectionButton({ path }: SidebarSectionButtonProps) {
       <ListItemText primary={path.name} />
     </ListItemButton>
   );
+}
+
+export function SidebarSectionButtonMinimize({
+  path,
+}: SidebarSectionButtonProps) {
+  return <IconButton>{path.Icon}</IconButton>;
 }

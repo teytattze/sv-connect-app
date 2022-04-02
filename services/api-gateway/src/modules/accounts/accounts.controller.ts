@@ -16,7 +16,7 @@ import {
   GetAccountByIdParam,
   UpdateAccountByIdParam,
   UpdateAccountBody,
-  CoreApiResponse,
+  CoreHttpResponse,
 } from '@sv-connect/domain';
 import { AccountsService } from './accounts.service';
 
@@ -36,9 +36,9 @@ export class AccountsController {
     operationId: 'indexAccounts',
     description: 'Index all user accounts',
   })
-  async indexAccount(): Promise<CoreApiResponse<AccountDto[]>> {
+  async indexAccount(): Promise<CoreHttpResponse<AccountDto[]>> {
     const { data } = await this.accountsService.indexAccounts();
-    return CoreApiResponse.success(data, 'Accounts indexed successfully');
+    return CoreHttpResponse.success({ data });
   }
 
   @Post('create')
@@ -53,14 +53,14 @@ export class AccountsController {
   })
   async createAccount(
     @Body() { email, password, emailVerified, role }: CreateAccountBody,
-  ): Promise<CoreApiResponse<AccountDto>> {
+  ): Promise<CoreHttpResponse<AccountDto>> {
     const { data } = await this.accountsService.createAccount({
       email,
       password,
       emailVerified,
       role,
     });
-    return CoreApiResponse.success(data, 'Account created successfully');
+    return CoreHttpResponse.success({ data });
   }
 
   @Get('emails/:email')
@@ -75,9 +75,9 @@ export class AccountsController {
   })
   async getAccountByEmail(
     @Param() { email }: GetAccountByEmailParam,
-  ): Promise<CoreApiResponse<AccountDto>> {
+  ): Promise<CoreHttpResponse<AccountDto>> {
     const { data } = await this.accountsService.getAccountByEmail(email);
-    return CoreApiResponse.success(data, 'Account retrieved successfully');
+    return CoreHttpResponse.success({ data });
   }
 
   @Get(':id')
@@ -92,9 +92,9 @@ export class AccountsController {
   })
   async getAccountById(
     @Param() { id }: GetAccountByIdParam,
-  ): Promise<CoreApiResponse<AccountDto>> {
+  ): Promise<CoreHttpResponse<AccountDto>> {
     const { data } = await this.accountsService.getAccountById(id);
-    return CoreApiResponse.success(data, 'Account retrieved successfully');
+    return CoreHttpResponse.success({ data });
   }
 
   @Put('update/:id')
@@ -110,13 +110,13 @@ export class AccountsController {
   async updateAccountById(
     @Param() { id }: UpdateAccountByIdParam,
     @Body() { email, emailVerified, password }: UpdateAccountBody,
-  ): Promise<CoreApiResponse<AccountDto>> {
+  ): Promise<CoreHttpResponse<AccountDto>> {
     const { data } = await this.accountsService.updateAccountById(id, {
       email,
       emailVerified,
       password,
     });
-    return CoreApiResponse.success(data, 'Account updated successfully');
+    return CoreHttpResponse.success({ data });
   }
 
   @Delete('delete/:id')
@@ -130,8 +130,10 @@ export class AccountsController {
   })
   async deleteAccountById(
     @Param() { id }: DeleteAccountByIdParam,
-  ): Promise<CoreApiResponse<null>> {
+  ): Promise<CoreHttpResponse<null>> {
     await this.accountsService.deleteAccountById(id);
-    return CoreApiResponse.success(null, 'Account deleted successfully');
+    return CoreHttpResponse.success({
+      message: 'Account deleted successfully',
+    });
   }
 }

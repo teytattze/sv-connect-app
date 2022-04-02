@@ -5,8 +5,8 @@ import {
   SpecializationsPattern,
 } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   ICreateSpecializationPayload,
   ISpecialization,
   ISpecializationsClient,
@@ -21,25 +21,27 @@ export class SpecializationsService implements ISpecializationsClient {
     @Inject(SPECIALIZATIONS_CLIENT) private readonly client: ClientProxy,
   ) {}
 
-  async indexSpecializations(): Promise<ICoreApiResponse<ISpecialization[]>> {
+  async indexSpecializations(): Promise<
+    ICoreServiceResponse<ISpecialization[]>
+  > {
     const [error, response] = await to<
-      ICoreApiResponse<ISpecialization[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISpecialization[]>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SpecializationsPattern.INDEX_SPECIALIZATIONS, {}),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async getSpecializationById(
     id: string,
-  ): Promise<ICoreApiResponse<ISpecialization>> {
+  ): Promise<ICoreServiceResponse<ISpecialization>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISpecialization>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISpecialization>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SpecializationsPattern.GET_SPECIALIZATION_BY_ID, {
@@ -47,16 +49,16 @@ export class SpecializationsService implements ISpecializationsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async createSpecialization(
     payload: ICreateSpecializationPayload,
-  ): Promise<ICoreApiResponse<ISpecialization>> {
+  ): Promise<ICoreServiceResponse<ISpecialization>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISpecialization>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISpecialization>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SpecializationsPattern.CREATE_SPECIALIZATION, {
@@ -64,17 +66,17 @@ export class SpecializationsService implements ISpecializationsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async updateSpecializationById(
     id: string,
     payload: IUpdateSpecializationPayload,
-  ): Promise<ICoreApiResponse<ISpecialization>> {
+  ): Promise<ICoreServiceResponse<ISpecialization>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISpecialization>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISpecialization>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SpecializationsPattern.UPDATE_SPECIALIZATION_BY_ID, {
@@ -83,14 +85,16 @@ export class SpecializationsService implements ISpecializationsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
-  async deleteSpecializationById(id: string): Promise<ICoreApiResponse<null>> {
+  async deleteSpecializationById(
+    id: string,
+  ): Promise<ICoreServiceResponse<null>> {
     const [error, response] = await to<
-      ICoreApiResponse<null>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<null>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SpecializationsPattern.DELETE_SPECIALIZATION_BY_ID, {
@@ -98,7 +102,7 @@ export class SpecializationsService implements ISpecializationsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

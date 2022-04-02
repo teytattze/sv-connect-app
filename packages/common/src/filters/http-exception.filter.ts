@@ -5,22 +5,22 @@ import {
   ExceptionFilter,
 } from '@nestjs/common';
 import {
-  CoreApiException,
-  CoreApiResponse,
+  CoreHttpException,
+  CoreHttpResponse,
   GeneralCode,
 } from '@sv-connect/domain';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(ex: CoreApiException | HttpException | Error, host: ArgumentsHost) {
+  catch(ex: CoreHttpException | HttpException | Error, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse();
     const apiResponseError = this.handleException(ex);
     response.status(apiResponseError.statusCode).send(apiResponseError);
   }
 
   private handleException(
-    ex: HttpException | CoreApiException | Error,
-  ): CoreApiResponse {
+    ex: HttpException | CoreHttpException | Error,
+  ): CoreHttpResponse {
     if (ex instanceof HttpException) {
       const resultStatusCode =
         ex.getStatus() || GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
@@ -31,13 +31,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
         GeneralCode.INTERNAL_SERVER_ERROR.errorCode;
       const resultData = null;
 
-      return CoreApiResponse.error(
-        resultStatusCode,
-        resultMessage,
-        resultErrorCode,
-        resultData,
-      );
-    } else if (ex instanceof CoreApiException) {
+      return CoreHttpResponse.error({
+        statusCode: resultStatusCode,
+        errorCode: resultErrorCode,
+        message: resultMessage,
+        data: resultData,
+      });
+    } else if (ex instanceof CoreHttpException) {
       const resultStatusCode =
         ex.statusCode || GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
       const resultMessage =
@@ -46,16 +46,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ex.errorCode || GeneralCode.INTERNAL_SERVER_ERROR.errorCode;
       const resultData = ex.data || null;
 
-      return CoreApiResponse.error(
-        resultStatusCode,
-        resultMessage,
-        resultErrorCode,
-        resultData,
-      );
+      return CoreHttpResponse.error({
+        statusCode: resultStatusCode,
+        errorCode: resultErrorCode,
+        message: resultMessage,
+        data: resultData,
+      });
     }
     const resultStatusCode = GeneralCode.INTERNAL_SERVER_ERROR.statusCode;
     const resultMessage =
       ex.message || GeneralCode.INTERNAL_SERVER_ERROR.message;
-    return CoreApiResponse.error(resultStatusCode, resultMessage);
+
+    return CoreHttpResponse.error({
+      statusCode: resultStatusCode,
+      message: resultMessage,
+    });
   }
 }

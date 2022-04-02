@@ -11,22 +11,15 @@
       transport: 5,
       options: {
         urls: ['amqp://localhost:5672'],
-        queue: 'service_auth_queue',
-        queueOptions: {
-          durable: false,
-        },
       },
     },
   },
   jwt: {
-    ttl: 900,
-    alg: 'RS512',
-    publicKeyPath: '/config/public-key.pem',
-    privateKeyPath: '/config/private-key.pem',
-  },
-  session: {
-    ttl: 1209600,
-    bytes: 32,
+    ttl: 604800,
+    alg: 'ES512',
+    iss: 'auth.sv-connect.com',
+    publicKeyPath: '/config/jwt-public.pem',
+    privateKeyPath: '/config/jwt-private.pem',
   },
   microservices: {
     accounts: {
@@ -34,16 +27,6 @@
       options: {
         urls: ['amqp://localhost:5672'],
         queue: 'service_accounts_queue',
-        queueOptions: {
-          durable: false,
-        },
-      },
-    },
-    sessions: {
-      transport: 5,
-      options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'service_sessions_queue',
         queueOptions: {
           durable: false,
         },

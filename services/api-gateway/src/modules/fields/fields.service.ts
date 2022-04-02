@@ -6,8 +6,8 @@ import {
   ICreateFieldPayload,
   IUpdateFieldPayload,
   IFieldsClient,
-  ICoreApiResponse,
-  CoreApiException,
+  ICoreServiceResponse,
+  CoreHttpException,
 } from '@sv-connect/domain';
 import to from 'await-to-js';
 import { firstValueFrom } from 'rxjs';
@@ -18,50 +18,50 @@ export class FieldsService implements IFieldsClient {
     @Inject(FIELDS_CLIENT) private readonly fieldsClient: ClientProxy,
   ) {}
 
-  async indexFields(): Promise<ICoreApiResponse<IField[]>> {
+  async indexFields(): Promise<ICoreServiceResponse<IField[]>> {
     const [error, response] = await to<
-      ICoreApiResponse<IField[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IField[]>,
+      ICoreServiceResponse<null>
     >(firstValueFrom(this.fieldsClient.send(FieldsPattern.INDEX_FIELDS, {})));
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
-  async getFieldById(id: string): Promise<ICoreApiResponse<IField>> {
+  async getFieldById(id: string): Promise<ICoreServiceResponse<IField>> {
     const [error, response] = await to<
-      ICoreApiResponse<IField>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IField>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.fieldsClient.send(FieldsPattern.GET_FIELD_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async createField(
     payload: ICreateFieldPayload,
-  ): Promise<ICoreApiResponse<IField>> {
+  ): Promise<ICoreServiceResponse<IField>> {
     const [error, response] = await to<
-      ICoreApiResponse<IField>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IField>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.fieldsClient.send(FieldsPattern.CREATE_FIELD, { data: payload }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async updateFieldById(
     id: string,
     payload: IUpdateFieldPayload,
-  ): Promise<ICoreApiResponse<IField>> {
+  ): Promise<ICoreServiceResponse<IField>> {
     const [error, response] = await to<
-      ICoreApiResponse<IField>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IField>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.fieldsClient.send(FieldsPattern.UPDATE_FIELD_BY_ID, {
@@ -70,20 +70,20 @@ export class FieldsService implements IFieldsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
-  async deleteFieldById(id: string): Promise<ICoreApiResponse<null>> {
+  async deleteFieldById(id: string): Promise<ICoreServiceResponse<null>> {
     const [error, response] = await to<
-      ICoreApiResponse<null>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<null>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.fieldsClient.send(FieldsPattern.DELETE_FIELD_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

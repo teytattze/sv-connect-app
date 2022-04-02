@@ -1,1 +1,2 @@
-export { ApiResponseInterceptor } from './api-response.interceptor';
+export { HttpResponseInterceptor } from './http-response.interceptor';
+export { ServiceResponseInterceptor } from './service-response.interceptor';

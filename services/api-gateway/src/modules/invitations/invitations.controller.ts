@@ -2,7 +2,7 @@ import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   AcceptInvitationByIdParam,
-  CoreApiResponse,
+  CoreHttpResponse,
   CreateInvitationBody,
   InvitationDto,
   RejectInvitationByIdParam,
@@ -17,24 +17,24 @@ export class InvitationsController {
   @Post('create')
   async createInvitation(
     @Body() body: CreateInvitationBody,
-  ): Promise<CoreApiResponse<InvitationDto>> {
+  ): Promise<CoreHttpResponse<InvitationDto>> {
     const { data } = await this.invitationsService.createInvitation(body);
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Put('accept/:id')
   async acceptInvitation(
     @Param() { id }: AcceptInvitationByIdParam,
-  ): Promise<CoreApiResponse<InvitationDto>> {
+  ): Promise<CoreHttpResponse<InvitationDto>> {
     const { data } = await this.invitationsService.acceptInvitationById(id);
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Put('reject/:id')
   async rejectInvitation(
     @Param() { id }: RejectInvitationByIdParam,
-  ): Promise<CoreApiResponse<InvitationDto>> {
+  ): Promise<CoreHttpResponse<InvitationDto>> {
     const { data } = await this.invitationsService.rejectInvitationById(id);
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 }

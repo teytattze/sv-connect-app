@@ -1,7 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { PrismaService, RpcExceptionFilter } from '@sv-connect/common';
+import {
+  PrismaService,
+  RpcExceptionFilter,
+  ServiceResponseInterceptor,
+} from '@sv-connect/common';
 import config from 'config';
 import { AppModule } from './app.module';
 import 'dotenv/config';
@@ -13,6 +17,7 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new RpcExceptionFilter());
+  app.useGlobalInterceptors(new ServiceResponseInterceptor());
 
   const prismaService: PrismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);

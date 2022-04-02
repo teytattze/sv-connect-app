@@ -1,15 +1,17 @@
 import { IField } from './field.interface';
 import { ICreateFieldPayload } from '../payloads/create-field.payload';
 import { IUpdateFieldPayload } from '../payloads/update-field.payload';
-import { ICoreApiResponse } from '../../common/api';
+import { ICoreServiceResponse } from '../../common';
 
 export interface IFieldsClient {
-  indexFields?(): Promise<ICoreApiResponse<IField[]>>;
-  getFieldById?(id: string): Promise<ICoreApiResponse<IField>>;
-  createField?(payload: ICreateFieldPayload): Promise<ICoreApiResponse<IField>>;
+  indexFields?(): Promise<ICoreServiceResponse<IField[]>>;
+  getFieldById?(id: string): Promise<ICoreServiceResponse<IField>>;
+  createField?(
+    payload: ICreateFieldPayload,
+  ): Promise<ICoreServiceResponse<IField>>;
   updateFieldById?(
     id: string,
     payload: IUpdateFieldPayload,
-  ): Promise<ICoreApiResponse<IField>>;
-  deleteFieldById?(id: string): Promise<ICoreApiResponse<void>>;
+  ): Promise<ICoreServiceResponse<IField>>;
+  deleteFieldById?(id: string): Promise<ICoreServiceResponse<void>>;
 }

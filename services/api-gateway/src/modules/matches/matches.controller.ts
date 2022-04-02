@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
-  CoreApiResponse,
+  CoreHttpResponse,
   MatchDto,
   MatchSelectedStudentsAndSupervisorsBody,
   MatchSelectedStudentsBody,
@@ -17,33 +17,33 @@ export class MatchesController {
   @Post('single/students')
   async matchSingleStudent(
     @Body() { studentId }: MatchSingleStudentBody,
-  ): Promise<CoreApiResponse<MatchDto>> {
+  ): Promise<CoreHttpResponse<MatchDto>> {
     const { data } = await this.matchesService.matchSingleStudent({
       studentId,
     });
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Post('selected/students')
   async matchSelectedStudents(
     @Body() { studentIds }: MatchSelectedStudentsBody,
-  ): Promise<CoreApiResponse<MatchDto[]>> {
+  ): Promise<CoreHttpResponse<MatchDto[]>> {
     const { data } = await this.matchesService.matchSelectedStudents({
       studentIds,
     });
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 
   @Post('selected/students/selected/supervisors')
   async matchSelectedStudentsAndSupervisors(
     @Body()
     { studentIds, supervisorIds }: MatchSelectedStudentsAndSupervisorsBody,
-  ): Promise<CoreApiResponse<MatchDto[]>> {
+  ): Promise<CoreHttpResponse<MatchDto[]>> {
     const { data } =
       await this.matchesService.matchSelectedStudentsAndSupervisors({
         studentIds,
         supervisorIds,
       });
-    return CoreApiResponse.success(data);
+    return CoreHttpResponse.success({ data });
   }
 }

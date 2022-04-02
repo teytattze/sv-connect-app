@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { SupervisorsPattern, SUPERVISORS_CLIENT } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   ICreateSupervisorPayload,
   IIndexSupervisorsByPayload,
   ISupervisor,
@@ -20,25 +20,25 @@ export class SupervisorsService implements ISupervisorsClient {
 
   async indexSupervisors(
     by: IIndexSupervisorsByPayload,
-  ): Promise<ICoreApiResponse<ISupervisor[]>> {
+  ): Promise<ICoreServiceResponse<ISupervisor[]>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISupervisor[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISupervisor[]>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SupervisorsPattern.INDEX_SUPERVISORS, { by }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async createSupervisor(
     payload: ICreateSupervisorPayload,
-  ): Promise<ICoreApiResponse<ISupervisor>> {
+  ): Promise<ICoreServiceResponse<ISupervisor>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISupervisor>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISupervisor>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SupervisorsPattern.CREATE_SUPERVISOR, {
@@ -46,7 +46,7 @@ export class SupervisorsService implements ISupervisorsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

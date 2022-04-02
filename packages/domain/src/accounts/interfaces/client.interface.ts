@@ -1,22 +1,22 @@
 import { ICreateAccountPayload } from '../payloads/create-account.payload';
 import { IUpdateAccountPayload } from '../payloads/update-account.payload';
 import { IAccount } from './account.interface';
-import { ICoreApiResponse } from '../../common/api';
+import { ICoreServiceResponse } from '../../common';
 
 export interface IAccountsClient {
-  indexAccounts?(): Promise<ICoreApiResponse<IAccount[]>>;
-  getAccountByEmail?(email: string): Promise<ICoreApiResponse<IAccount>>;
-  getAccountById?(id: string): Promise<ICoreApiResponse<IAccount>>;
+  indexAccounts?(): Promise<ICoreServiceResponse<IAccount[]>>;
+  getAccountByEmail?(email: string): Promise<ICoreServiceResponse<IAccount>>;
+  getAccountById?(id: string): Promise<ICoreServiceResponse<IAccount>>;
   createAccount?(
     payload: ICreateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>>;
+  ): Promise<ICoreServiceResponse<IAccount>>;
   updateAccountById?(
     id: string,
     payload: IUpdateAccountPayload,
-  ): Promise<ICoreApiResponse<IAccount>>;
-  deleteAccountById?(id: string): Promise<ICoreApiResponse<null>>;
+  ): Promise<ICoreServiceResponse<IAccount>>;
+  deleteAccountById?(id: string): Promise<ICoreServiceResponse<null>>;
 }
 
 export interface IAdminAccountsClient {
-  getAccountByEmail?(email: string): Promise<ICoreApiResponse<IAccount>>;
+  getAccountByEmail?(email: string): Promise<ICoreServiceResponse<IAccount>>;
 }

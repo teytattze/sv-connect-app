@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { SupervisorsPattern, SUPERVISORS_CLIENT } from '@sv-connect/common';
 import {
-  ICoreApiResponse,
+  CoreRpcException,
+  ICoreServiceResponse,
   IIndexSupervisorsByPayload,
   ISupervisor,
   ISupervisorsClient,
@@ -18,29 +19,31 @@ export class SupervisorsService implements ISupervisorsClient {
 
   async indexSupervisor(
     by: IIndexSupervisorsByPayload,
-  ): Promise<ICoreApiResponse<ISupervisor[]>> {
+  ): Promise<ICoreServiceResponse<ISupervisor[]>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISupervisor[]>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISupervisor[]>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SupervisorsPattern.INDEX_SUPERVISORS, { by }),
       ),
     );
-    if (error) throw new RpcException(error);
+    if (error) throw CoreRpcException.fromService(error);
     return response;
   }
 
-  async getSupervisorById(id: string): Promise<ICoreApiResponse<ISupervisor>> {
+  async getSupervisorById(
+    id: string,
+  ): Promise<ICoreServiceResponse<ISupervisor>> {
     const [error, response] = await to<
-      ICoreApiResponse<ISupervisor>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<ISupervisor>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(SupervisorsPattern.GET_SUPERVISOR_BY_ID, { id }),
       ),
     );
-    if (error) throw new RpcException(error);
+    if (error) throw CoreRpcException.fromService(error);
     return response;
   }
 }

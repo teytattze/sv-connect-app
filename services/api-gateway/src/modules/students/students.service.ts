@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { StudentsPattern, STUDENTS_CLIENT } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   ICreateStudentPayload,
   IStudent,
   IStudentsClient,
@@ -18,16 +18,16 @@ export class StudentsService implements IStudentsClient {
 
   async createStudent(
     payload: ICreateStudentPayload,
-  ): Promise<ICoreApiResponse<IStudent>> {
+  ): Promise<ICoreServiceResponse<IStudent>> {
     const [error, response] = await to<
-      ICoreApiResponse<IStudent>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IStudent>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(StudentsPattern.CREATE_STUDENT, { data: payload }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 }

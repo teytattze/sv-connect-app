@@ -6,8 +6,7 @@ import {
   ISpecializationsClient,
   ISpecialization,
   IUpdateSpecializationPayload,
-  ICoreApiResponse,
-  CoreApiResponse,
+  CoreServiceResponse,
 } from '@sv-connect/domain';
 import { SpecializationsService } from './specializations.service';
 
@@ -18,45 +17,49 @@ export class SpecializationsController implements ISpecializationsClient {
   ) {}
 
   @MessagePattern(SpecializationsPattern.INDEX_SPECIALIZATIONS)
-  async indexSpecializations(): Promise<ICoreApiResponse<ISpecialization[]>> {
+  async indexSpecializations(): Promise<
+    CoreServiceResponse<ISpecialization[]>
+  > {
     const specializations =
       await this.specializationsService.indexSpecializations();
-    return CoreApiResponse.success(specializations);
+    return CoreServiceResponse.success({ data: specializations });
   }
 
   @MessagePattern(SpecializationsPattern.GET_SPECIALIZATION_BY_ID)
   async getSpecializationById(
     @Payload('id') id: string,
-  ): Promise<ICoreApiResponse<ISpecialization>> {
+  ): Promise<CoreServiceResponse<ISpecialization>> {
     const specialization =
       await this.specializationsService.getSpecializationById(id);
-    return CoreApiResponse.success(specialization);
+    return CoreServiceResponse.success({ data: specialization });
   }
 
   @MessagePattern(SpecializationsPattern.CREATE_SPECIALIZATION)
   async createSpecialization(
     @Payload('data') payload: ICreateSpecializationPayload,
-  ): Promise<ICoreApiResponse<ISpecialization>> {
+  ): Promise<CoreServiceResponse<ISpecialization>> {
     const specialization =
       await this.specializationsService.createSpecialization(payload);
-    return CoreApiResponse.success(specialization);
+    return CoreServiceResponse.success({ data: specialization });
   }
 
   @MessagePattern(SpecializationsPattern.UPDATE_SPECIALIZATION_BY_ID)
   async updateSpecializationById(
     @Payload('id') id: string,
     @Payload('data') payload: IUpdateSpecializationPayload,
-  ): Promise<ICoreApiResponse<ISpecialization>> {
+  ): Promise<CoreServiceResponse<ISpecialization>> {
     const specialization =
       await this.specializationsService.updateSpecializationById(id, payload);
-    return CoreApiResponse.success(specialization);
+    return CoreServiceResponse.success({ data: specialization });
   }
 
   @MessagePattern(SpecializationsPattern.DELETE_SPECIALIZATION_BY_ID)
   async deleteSpecializationById(
     @Payload('id') id: string,
-  ): Promise<ICoreApiResponse<null>> {
+  ): Promise<CoreServiceResponse<null>> {
     await this.specializationsService.deleteSpecializationById(id);
-    return CoreApiResponse.success(null, 'Specialization deleted successfully');
+    return CoreServiceResponse.success({
+      message: 'Specialization deleted successfully',
+    });
   }
 }

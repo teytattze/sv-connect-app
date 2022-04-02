@@ -3,7 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   AccountDto,
   AdminGetAccountByEmailParam,
-  CoreApiResponse,
+  CoreHttpResponse,
 } from '@sv-connect/domain';
 import { AccountsService } from './accounts.service';
 
@@ -24,8 +24,11 @@ export class AdminAccountsController {
   })
   async adminGetAccountByEmail(
     @Param() { email }: AdminGetAccountByEmailParam,
-  ): Promise<CoreApiResponse<AccountDto>> {
+  ): Promise<CoreHttpResponse<AccountDto>> {
     const { data } = await this.accountsService.adminGetAccountByEmail(email);
-    return CoreApiResponse.success(data, 'Get account successfully');
+    return CoreHttpResponse.success({
+      data,
+      message: 'Get account successfully',
+    });
   }
 }

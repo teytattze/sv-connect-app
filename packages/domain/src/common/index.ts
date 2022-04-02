@@ -1,6 +1,3 @@
-export { CoreApiException, CoreApiResponse } from './api';
-export type { ICoreApiException, ICoreApiResponse } from './api';
-
 export {
   AccountsCode,
   AuthCode,
@@ -16,3 +13,18 @@ export {
 export type { ICode } from './code';
 
 export { BaseServiceCode, HttpStatus, PrismaErrorCode } from './enums';
+
+export { CoreHttpException, CoreRpcException } from './exceptions';
+export type {
+  ICoreHttpException,
+  ICoreHttpExceptionPayload,
+  IFromServicePayload,
+} from './exceptions';
+
+export { CoreHttpResponse, CoreServiceResponse } from './responses';
+export type {
+  ICoreHttpResponse,
+  ICoreHttpResponsePayload,
+  ICoreServiceResponse,
+  ICoreServiceResponsePayload,
+} from './responses';

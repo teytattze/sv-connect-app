@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { INVITATIONS_CLIENT, InvitationsPattern } from '@sv-connect/common';
 import {
-  CoreApiException,
-  ICoreApiResponse,
+  CoreHttpException,
+  ICoreServiceResponse,
   ICreateInvitationPayload,
   IInvitation,
   IInvitationsClient,
@@ -19,10 +19,10 @@ export class InvitationsService implements IInvitationsClient {
 
   async createInvitation(
     payload: ICreateInvitationPayload,
-  ): Promise<ICoreApiResponse<IInvitation>> {
+  ): Promise<ICoreServiceResponse<IInvitation>> {
     const [error, response] = await to<
-      ICoreApiResponse<IInvitation>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IInvitation>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(InvitationsPattern.CREATE_INVITATION, {
@@ -30,37 +30,37 @@ export class InvitationsService implements IInvitationsClient {
         }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return response;
   }
 
   async acceptInvitationById(
     id: string,
-  ): Promise<ICoreApiResponse<IInvitation>> {
+  ): Promise<ICoreServiceResponse<IInvitation>> {
     const [error, invitation] = await to<
-      ICoreApiResponse<IInvitation>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IInvitation>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(InvitationsPattern.ACCEPT_INVITATION_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return invitation;
   }
 
   async rejectInvitationById(
     id: string,
-  ): Promise<ICoreApiResponse<IInvitation>> {
+  ): Promise<ICoreServiceResponse<IInvitation>> {
     const [error, invitation] = await to<
-      ICoreApiResponse<IInvitation>,
-      ICoreApiResponse<null>
+      ICoreServiceResponse<IInvitation>,
+      ICoreServiceResponse<null>
     >(
       firstValueFrom(
         this.client.send(InvitationsPattern.REJECT_INVITATION_BY_ID, { id }),
       ),
     );
-    if (error) throw CoreApiException.new(error);
+    if (error) throw CoreHttpException.fromService(error);
     return invitation;
   }
 }

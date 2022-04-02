@@ -6,8 +6,6 @@ import {
   mockAccounts,
   mockAccountsRepository,
 } from '../../mocks/accounts.mock';
-import { mockSessionsService } from '../../mocks/sessions.mock';
-import { SessionsService } from '../sessions/sessions.service';
 import { AccountsRepository } from './accounts.repository';
 import { AccountsService } from './accounts.service';
 
@@ -17,10 +15,6 @@ describe('AccountsService', () => {
     {
       provide: AccountsRepository,
       useValue: mockAccountsRepository,
-    },
-    {
-      provide: SessionsService,
-      useValue: mockSessionsService,
     },
   ];
 

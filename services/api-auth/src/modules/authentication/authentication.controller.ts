@@ -1,41 +1,61 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { AuthPattern } from '@sv-connect/common';
+import { Controller, Post, Response, UseGuards } from '@nestjs/common';
 import {
-  CoreApiResponse,
-  IAuthClient,
-  IAuthTokens,
-  ICoreApiResponse,
-  ILoginPayload,
-  IRefreshAccessPayload,
+  ACCESS_TOKEN_COOKIE_NAME,
+  ACCOUNT_COOKIE_NAME,
+  CoreHttpResponse,
+  IAccount,
 } from '@sv-connect/domain';
+import config from 'config';
+import { Response as IResponse } from 'express';
 import { AuthenticationService } from './authentication.service';
+import { LocalAuthGuard } from '../../common/guards/local.guard';
+import { Account } from '../../common/decorators/account.decorator';
+import 'dotenv/config';
+import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
 
-@Controller()
-export class AuthenticationController implements IAuthClient {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+@Controller('authentication')
+export class AuthenticationController {
+  private accessTokenTTL: number;
 
-  @MessagePattern(AuthPattern.LOGIN)
+  constructor(private readonly authenticationService: AuthenticationService) {
+    this.accessTokenTTL = config.get<number>('jwt.ttl');
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
   async login(
-    @Payload('data') payload: ILoginPayload,
-  ): Promise<ICoreApiResponse<IAuthTokens>> {
-    const tokens = await this.authenticationService.login(payload);
-    return CoreApiResponse.success(tokens);
+    @Account() account: IAccount,
+    @Response({ passthrough: true }) response: IResponse,
+  ): Promise<CoreHttpResponse<null>> {
+    const { accessToken } = await this.authenticationService.login(account);
+    response.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+      maxAge: this.accessTokenTTL * 1000,
+      httpOnly: true,
+    });
+    response.cookie(ACCOUNT_COOKIE_NAME, account, {
+      maxAge: this.accessTokenTTL * 1000,
+    });
+    return CoreHttpResponse.success({
+      message: 'Login successfully',
+    });
   }
 
-  @MessagePattern(AuthPattern.LOGOUT)
+  @Post('logout')
   async logout(
-    @Payload('accountId') accountId: string,
-  ): Promise<ICoreApiResponse<null>> {
-    await this.authenticationService.logout(accountId);
-    return CoreApiResponse.success(null, 'Logout successful');
+    @Response({ passthrough: true }) response: IResponse,
+  ): Promise<CoreHttpResponse<null>> {
+    response.clearCookie(ACCESS_TOKEN_COOKIE_NAME, { maxAge: 0 });
+    response.clearCookie(ACCOUNT_COOKIE_NAME, { maxAge: 0 });
+    return CoreHttpResponse.success({
+      message: 'Logout successfully',
+    });
   }
 
-  @MessagePattern(AuthPattern.REFRESH_ACCESS)
-  async refreshAccess(
-    @Payload('data') payload: IRefreshAccessPayload,
-  ): Promise<ICoreApiResponse<IAuthTokens>> {
-    const tokens = await this.authenticationService.refreshAccess(payload);
-    return CoreApiResponse.success(tokens);
+  @UseGuards(JwtAuthGuard)
+  @Post('jwt/validate')
+  async jwtValidate() {
+    return CoreHttpResponse.success({
+      message: 'Jwt validate successfully',
+    });
   }
 }

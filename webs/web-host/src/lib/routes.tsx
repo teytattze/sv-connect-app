@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';

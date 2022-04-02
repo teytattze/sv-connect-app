@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IconButton, Paper, Stack, Typography } from '@mui/material';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -7,9 +7,10 @@ import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneR
 
 export interface NavbarProps {
   title: string;
+  handleToggle?: () => void;
 }
 
-export function Navbar({ title }: NavbarProps) {
+export function Navbar({ title, handleToggle }: NavbarProps) {
   return (
     <nav>
       <Paper
@@ -25,7 +26,7 @@ export function Navbar({ title }: NavbarProps) {
           justifyContent="space-between"
         >
           <Stack alignItems="center" direction="row" spacing={2}>
-            <IconButton size="small">
+            <IconButton size="small" onClick={handleToggle}>
               <NotesRoundedIcon />
             </IconButton>
             <Typography variant="h6" component="h1" fontWeight={600}>

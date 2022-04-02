@@ -1,4 +1,5 @@
 export {
+  ACCOUNT_COOKIE_NAME,
   AccountDto,
   AccountEntity,
   AccountRole,
@@ -20,18 +21,12 @@ export type {
   IUpdateAccountPayload,
 } from './accounts';
 
-export {
-  ACCESS_TOKEN_COOKIE_NAME,
-  ACCESS_TOKEN_HEADER_NAME,
-  REFRESH_TOKEN_COOKIE_NAME,
-  LoginBody,
-} from './auth';
+export { ACCESS_TOKEN_COOKIE_NAME, LoginBody } from './auth';
 export type {
   IAuthClient,
   IAuthService,
-  IAuthTokens,
+  IAuthToken,
   ILoginPayload,
-  IRefreshAccessPayload,
 } from './auth';
 
 export {
@@ -118,25 +113,13 @@ export type {
 } from './projects';
 
 export {
-  CreateSessionBody,
-  GetSessionByAccountIdParam,
-  Session,
-  SessionEntity,
-} from './sessions';
-export type {
-  ICreateSessionPayload,
-  ISession,
-  ISessionsClient,
-  ISessionsService,
-  IUpdateSessionPayload,
-} from './sessions';
-
-export {
   AccountsCode,
   AuthCode,
   BaseServiceCode,
-  CoreApiException,
-  CoreApiResponse,
+  CoreHttpException,
+  CoreHttpResponse,
+  CoreRpcException,
+  CoreServiceResponse,
   FieldsCode,
   InvitationsCode,
   GeneralCode,
@@ -148,7 +131,16 @@ export {
   StudentsCode,
   SupervisorsCode,
 } from './common';
-export type { ICoreApiException, ICoreApiResponse, ICode } from './common';
+export type {
+  ICode,
+  ICoreHttpException,
+  ICoreHttpExceptionPayload,
+  ICoreHttpResponse,
+  ICoreHttpResponsePayload,
+  ICoreServiceResponse,
+  ICoreServiceResponsePayload,
+  IFromServicePayload,
+} from './common';
 
 export {
   CreateSpecializationBody,
