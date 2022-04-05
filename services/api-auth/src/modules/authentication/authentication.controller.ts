@@ -1,4 +1,4 @@
-import { Controller, Post, Response, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, Response, UseGuards } from '@nestjs/common';
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   ACCOUNT_COOKIE_NAME,
@@ -6,14 +6,14 @@ import {
   IAccount,
 } from '@sv-connect/domain';
 import config from 'config';
-import { Response as IResponse } from 'express';
+import { Request, Response as IResponse } from 'express';
 import { AuthenticationService } from './authentication.service';
 import { LocalAuthGuard } from '../../common/guards/local.guard';
 import { Account } from '../../common/decorators/account.decorator';
-import 'dotenv/config';
 import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import 'dotenv/config';
 
-@Controller('authentication')
+@Controller('auth')
 export class AuthenticationController {
   private accessTokenTTL: number;
 
@@ -26,7 +26,7 @@ export class AuthenticationController {
   async login(
     @Account() account: IAccount,
     @Response({ passthrough: true }) response: IResponse,
-  ): Promise<CoreHttpResponse<null>> {
+  ): Promise<CoreHttpResponse<IAccount>> {
     const { accessToken } = await this.authenticationService.login(account);
     response.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
       maxAge: this.accessTokenTTL * 1000,
@@ -36,6 +36,7 @@ export class AuthenticationController {
       maxAge: this.accessTokenTTL * 1000,
     });
     return CoreHttpResponse.success({
+      data: account,
       message: 'Login successfully',
     });
   }
@@ -52,9 +53,23 @@ export class AuthenticationController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('jwt/validate')
-  async jwtValidate() {
+  @Post('validate/jwt')
+  async jwtValidate(
+    @Account() account: IAccount,
+    @Req() request: Request,
+    @Response({ passthrough: true }) response: IResponse,
+  ): Promise<CoreHttpResponse<IAccount>> {
+    const cookieAccount = request.cookies[ACCOUNT_COOKIE_NAME];
+    const isValid = this.authenticationService.validateJwt(
+      account,
+      cookieAccount,
+    );
+    if (!isValid) {
+      response.clearCookie(ACCESS_TOKEN_COOKIE_NAME, { maxAge: 0 });
+      response.clearCookie(ACCOUNT_COOKIE_NAME, { maxAge: 0 });
+    }
     return CoreHttpResponse.success({
+      data: account,
       message: 'Jwt validate successfully',
     });
   }

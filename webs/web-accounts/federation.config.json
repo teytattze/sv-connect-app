@@ -1,0 +1,10 @@
+{
+  "name": "accounts",
+  "remotes": {
+    "@sv-connect/web-shared": "shared@http://localhost:3101/remoteEntry.js",
+    "@sv-connect/web-ui": "ui@http://localhost:3100/remoteEntry.js"
+  },
+  "exposes": {
+    ".": "./src/exposes"
+  }
+}

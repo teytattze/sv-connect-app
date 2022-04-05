@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@sv-connect/web-accounts": ["../web-accounts/src/exposes"],
+      "@sv-connect/web-auth": ["../web-auth/src/exposes"],
+      "@sv-connect/web-shared": ["../web-shared/src/exposes"],
       "@sv-connect/web-ui": ["../web-ui/src/exposes"]
     }
   },

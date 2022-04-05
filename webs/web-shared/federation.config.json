@@ -1,0 +1,7 @@
+{
+  "name": "shared",
+  "remotes": {},
+  "exposes": {
+    ".": "./src/exposes"
+  }
+}

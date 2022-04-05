@@ -1,6 +1,9 @@
 {
   "name": "host",
   "remotes": {
+    "@sv-connect/web-accounts": "accounts@http://localhost:3001/remoteEntry.js",
+    "@sv-connect/web-auth": "auth@http://localhost:3002/remoteEntry.js",
+    "@sv-connect/web-shared": "shared@http://localhost:3101/remoteEntry.js",
     "@sv-connect/web-ui": "ui@http://localhost:3100/remoteEntry.js"
   },
   "exposes": {}

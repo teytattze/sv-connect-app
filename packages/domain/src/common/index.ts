@@ -28,3 +28,5 @@ export type {
   ICoreServiceResponse,
   ICoreServiceResponsePayload,
 } from './responses';
+
+export type { Nullable, Optional } from './types';

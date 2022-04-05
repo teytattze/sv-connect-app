@@ -1,7 +1,3 @@
-import * as React from 'react';
-
-function App() {
-  return <div />;
+export function App() {
+  return <div>Web Accounts</div>;
 }
-
-export default App;

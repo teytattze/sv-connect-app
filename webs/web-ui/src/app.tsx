@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function App() {
-  return null;
+  return <div>Web UI</div>;
 }

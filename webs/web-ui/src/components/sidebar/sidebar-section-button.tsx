@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconButton, ListItemButton, ListItemText, Stack } from '@mui/material';
 import { IPath } from '../../interfaces/routes.interface';
 

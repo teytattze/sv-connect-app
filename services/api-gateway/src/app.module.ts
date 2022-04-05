@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import {
   ACCOUNTS_CLIENT,
-  AUTH_CLIENT,
   ClientsProvider,
   FIELDS_CLIENT,
   IClientsProviderOptions,
@@ -30,10 +29,6 @@ const clientsProviderOptions: IClientsProviderOptions[] = [
   {
     provide: ACCOUNTS_CLIENT,
     transport: config.get('microservices.accounts'),
-  },
-  {
-    provide: AUTH_CLIENT,
-    transport: config.get('microservices.auth'),
   },
   {
     provide: FIELDS_CLIENT,

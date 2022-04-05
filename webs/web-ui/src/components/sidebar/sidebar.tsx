@@ -1,7 +1,6 @@
-import React from 'react';
 import { Box, Divider, Drawer, Paper, Stack, Typography } from '@mui/material';
-import { useWindowSize } from '../../hooks/use-window-size';
 import { SidebarSection, SidebarSectionMinimize } from './sidebar-section';
+import { useWindowSize } from '../../hooks/use-window-size.hook';
 import { IRoute } from '../../interfaces/routes.interface';
 
 export enum SidebarType {

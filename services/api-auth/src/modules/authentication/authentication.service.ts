@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IAccount, ILoginPayload } from '@sv-connect/domain';
 import * as bcrypt from 'bcryptjs';
+import _ from 'lodash';
 import { AdminAccountsService } from '../accounts/accounts.admin.service';
 
 @Injectable()
@@ -34,6 +35,10 @@ export class AuthenticationService {
     };
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };
+  }
+
+  validateJwt(jwtAccount: IAccount, cookieAccount: IAccount): boolean {
+    return _.isEqual(jwtAccount, cookieAccount);
   }
 
   private async compareHashedPassword(

@@ -13,7 +13,6 @@ export class AdminAccountsRepository {
     role: true,
     createdAt: true,
     updatedAt: true,
-    session: false,
     supervisor: false,
     student: false,
     profile: false,

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 import { Navbar, Sidebar, SidebarType } from '@sv-connect/web-ui';
 import { Outlet } from 'react-router-dom';
+import { AuthGuard } from '../components/auth-guard';
 import { routes } from '../lib/routes';
 
 export function DashboardLayout() {
@@ -36,7 +37,7 @@ export function DashboardLayout() {
   };
 
   return (
-    <>
+    <AuthGuard>
       <Sidebar
         isOpen={isSidebarOpen}
         routes={routes}
@@ -57,7 +58,7 @@ export function DashboardLayout() {
           </Box>
         </Box>
       </Box>
-    </>
+    </AuthGuard>
   );
 }
 
